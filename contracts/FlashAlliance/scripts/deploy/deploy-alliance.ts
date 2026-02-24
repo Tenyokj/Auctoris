@@ -25,13 +25,6 @@ async function main() {
   const token = await Token.deploy(tokenOwner);
   await token.waitForDeployment();
 
-  const mintTo = process.env.MINT_TO ?? deployer.address;
-  const mintAmount = process.env.MINT_AMOUNT ?? "3000000";
-  const tokenOwnerSigner = await ethers.getSigner(tokenOwner);
-  const mintTx = await token.connect(tokenOwnerSigner).mint(mintTo, ethers.parseUnits(mintAmount, 18));
-  await mintTx.wait();
-  console.log(`Minted ${mintAmount} TTK to ${mintTo}`);
-
   const Factory = await ethers.getContractFactory("AllianceFactory");
   const factory = await Factory.deploy();
   await factory.waitForDeployment();
