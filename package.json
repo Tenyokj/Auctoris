@@ -3,8 +3,18 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "te": "hardhat test",
-    "compile": "hardhat compile"
+    "test": "hardhat test",
+    "compile": "hardhat compile",
+    "coverage": "hardhat test --coverage",
+    "deploy:dex:local": "hardhat run scripts/dex/deploy-proxies.ts --network localhost",
+    "deploy:dex:sepolia": "hardhat run scripts/dex/deploy-proxies.ts --network sepolia",
+    "upgrade:dex:local": "hardhat run scripts/dex/upgrade-proxy.ts --network localhost",
+    "upgrade:dex:sepolia": "hardhat run scripts/dex/upgrade-proxy.ts --network sepolia",
+    "verify:dex:local": "hardhat run scripts/dex/verify-deploy.ts --network localhost",
+    "verify:dex:sepolia": "hardhat run scripts/dex/verify-deploy.ts --network sepolia",
+    "deploy:stealth:local": "hardhat run scripts/deploy-stealth-announcer.ts --network localhost",
+    "deploy:stealth:sepolia": "hardhat run scripts/deploy-stealth-announcer.ts --network sepolia",
+    "scanner": "node --env-file=.env backend/scanner.js"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ethers": "^4.0.3",

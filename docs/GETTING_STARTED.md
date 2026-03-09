@@ -1,4 +1,13 @@
-# FlashAlliance: Getting Started
+**Getting Started**
+
+**Contents**
+1. Requirements
+2. Install
+3. Compile
+4. Test
+5. Run Local Node
+6. Deploy Local
+7. Verify Local
 
 **Requirements**
 1. `node >= 22.10`
@@ -6,34 +15,30 @@
 
 **Install**
 ```bash
-cd contracts/FlashAlliance
 npm i
 ```
 
 **Compile**
 ```bash
-npx hardhat compile
+npm run compile
 ```
 
-**Run Tests**
+**Test**
 ```bash
-npx hardhat test
+npm test
 ```
 
-**Run One Suite**
-```bash
-npx hardhat test test/FlashAlliance.ts
-```
-
-**Local Node**
+**Run Local Node**
 ```bash
 npx hardhat node
 ```
 
-**Deploy (Localhost)**
+**Deploy Local**
 ```bash
-TOKEN_OWNER=0xYourTokenOwner \
-npx hardhat run scripts/deploy/deploy-alliance.ts --network localhost
+npm run deploy:dex:local
 ```
 
-See deployment details in `../scripts/docs_deploy/DEPLOY.md`.
+**Verify Local**
+```bash
+npm run verify:dex:local
+```

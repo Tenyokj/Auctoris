@@ -1,24 +1,24 @@
-# FlashAlliance FAQ
+**FAQ**
 
-**What is FlashAlliance?**
-A lightweight module where a fixed participant group pools ERC20 funds to buy and later sell an NFT.
+**Contents**
+1. Naming
+2. Deployment and Updating
+3. Testing
+4. Scope
 
-**Is this integrated with BERT governance?**
-No. It is standalone and has local `Ownable` admin controls.
+**Naming**
+1. Yes, it's correctly called the AlsoSwap Protocol.
+2. In DeFi, a DEX is usually called a protocol.
 
-**Can participants be changed after deployment?**
-No. Participant list and shares are fixed in constructor.
+**Deployment and Update**
+1. Why does the address change locally: `hardhat node` restarts the state
+2. Why does the update fail from the owner: the signer is not the owner of `ProxyAdmin`
+3. Why does Hardhat complain about `--proxyAdmin`: env vars are used for the script
 
-**How are sale decisions approved?**
-By share-weighted voting:
-1. Normal price: `quorumPercent` (default 60)
-2. Loss price: `lossSaleQuorumPercent` (default 80)
+**Testing**
+1. Is `hardhat node` required for testing: No, `hardhat test` uses the in-process network
+2. How to run coverage: `npm run Cover`
 
-**What happens if target funding is not reached?**
-After deadline, a participant can call `cancelFunding`, then everyone withdraws own deposit via `withdrawRefund`.
-
-**Can NFT be rescued if sale is stuck?**
-Yes. Use emergency voting + `emergencyWithdrawNFT` once quorum is reached.
-
-**Is FlashAlliance upgradeable?**
-No. Contracts are non-upgradeable in current design.
+**Scope**
+1. Is a faucet needed: not required for the DEX core
+2. A builder is usually used for the demo version and for onboarding testers

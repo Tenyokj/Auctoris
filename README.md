@@ -1,59 +1,186 @@
-![Bert-Alliances module v1.0.0](https://img.shields.io/static/v1?label=Bert-Alliances&message=module%20v1.0.0&color=6B8E23) ![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-green)
-![Node.js >=22](https://img.shields.io/badge/Node.js->=22-brightgreen) ![TypeScript 5.8.0](https://img.shields.io/badge/TypeScript-5.8.0-3178C6) ![Hardhat 3.0.15](https://img.shields.io/badge/Hardhat-3.0.1-yellow) ![Solidity](https://img.shields.io/badge/Solidity-^0.8.20-orange) ![Ethers 6.15.0](https://img.shields.io/badge/Ethers-6.15.0-3C3C3D) ![Tests: Unit passing](https://img.shields.io/badge/Tests%3A%20Unit-passing-success) ![Tests: Coverage >95%](https://img.shields.io/badge/coverage-95%25-orange)
-![Tests: Integration: Scratch passing](https://img.shields.io/badge/Tests%3A%20Integration%3A%20Scratch-passing-success) ![Tests: Integration: Sepolia Fork passing](https://img.shields.io/badge/Tests%3A%20Integration%3A%20Sepolia%20Fork-passing-success) ![Linters passing](https://img.shields.io/badge/Linters-passing-success)
+![AlsoSwap v1.0.0](https://img.shields.io/badge/AlsoSwap-v1.0.0-0EA5E9) ![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-green)
+![Node.js >=22](https://img.shields.io/badge/Node.js->=22-brightgreen) ![TypeScript 5.8.0](https://img.shields.io/badge/TypeScript-5.8.0-3178C6) ![Hardhat 3.0.15](https://img.shields.io/badge/Hardhat-3.0.15-yellow)
+![Solidity ^0.8.20](https://img.shields.io/badge/Solidity-^0.8.20-orange) ![Upgradeable: Transparent Proxy](https://img.shields.io/badge/Upgradeable-Transparent%20Proxy-blueviolet) ![DEX](https://img.shields.io/badge/DeFi-AMM%20DEX-purple)
+![Ethers 6.15.0](https://img.shields.io/badge/Ethers-6.15.0-3C3C3D) ![Tests: Unit passing](https://img.shields.io/badge/Tests%3A%20Unit-passing-success) ![Coverage >95%](https://img.shields.io/badge/Coverage-%3E95%25-success)
 
-![FlashAlliance Banner](./docs/bert-alliances.png)
+![AlsoSwap Banner](./docs/assets/alsoswap.png)
 
-**FlashAlliance**
-is a standalone ERC20-funded collective NFT trading module.
-Each `Alliance` instance is a self-contained pool with fixed participants and fixed ownership shares.
+# AlsoSwap Protocol
 
-**FlashAlliance** is designed as a lightweight, capital-efficient coordination layer for small groups that want to acquire and manage high-value NFTs together.
+**AlsoSwap Protocol** is an upgradeable AMM DEX for DAO and community ERC20 tokens in Ethereum Sepolia.
 
-There is no global DAO dependency.
-Each Alliance operates independently.
+It provides a full on-chain stack for token listing, liquidity provisioning, and token exchange with constant-product pricing. Projects can launch pools for governance tokens, LPs can provide liquidity and earn fees, and users can swap tokens through a router with slippage/deadline controls.
 
-Note: Please read the Contract [Documentation](https://flash-docs.vercel.app) before integrating with this repo.
+This repository contains the core protocol contracts, deployment scripts, upgrade scripts, verification scripts, and high-coverage test suites.
 
-**Core Flow**
+## Table of Contents
+1. [Why AlsoSwap](#why-alsoswap)
+2. [What You Can Do](#what-you-can-do)
+3. [Protocol Components](#protocol-components)
+4. [How It Works](#how-it-works)
+5. [Security and Upgrade Model](#security-and-upgrade-model)
+6. [Quick Start](#quick-start)
+7. [Deployment and Upgrade](#deployment-and-upgrade)
+8. [Documentation Map](#documentation-map)
+9. [Roadmap](#roadmap)
+10. [Disclaimer](#disclaimer)
+11. [License](#license)
 
-1. Participants deposit ERC20 in `Funding`.
-2. Alliance buys NFT when target is reached.
-3. Participants vote sale params in `Acquired`.
-4. Sale executes and proceeds are split by fixed shares.
-5. If funding fails, participants withdraw refunds.
-6. Emergency NFT withdrawal is available via participant quorum.
+## Why AlsoSwap
+1. Built for DAO token ecosystems: easy onboarding of project tokens into AMM pools.
+2. Real liquidity and market-driven pricing: pool reserves define executable spot price.
+3. Practical developer stack: routers, oracle, governance, and proxy-based upgrades.
+4. Testnet-first safety: strong engineering practices without mainnet-level economic assumptions.
 
+## What You Can Do
+1. Create pools for any ERC20 pair through `PoolFactory`.
+2. Add and remove liquidity with LP share accounting.
+3. Swap tokens via `Router` and optimized `RouterV2` paths.
+4. Swap ETH paths through WETH wrappers.
+5. Use flash swap mechanics for advanced integrations.
+6. Query TWAP from `PriceOracle` for safer external pricing usage.
+7. Control protocol parameters with timelocked governance flows.
 
-**Contract Documentation**
-See: [docs/CONTRACTS.md](docs/CONTRACTS.md)
+## Protocol Components
 
-**Learn More**
-1. Documentation: [website](https://flash-docs.vercel.app)
-2. Flash Alliances site: [website](https://flash-alliances.vercel.app)
+### Core
+1. `PoolFactory` - pool registry, global fees, fee receiver, limiter, pause root.
+2. `LiquidityPool` - AMM reserves, LP token mint/burn, swap, flash swap, cumulative pricing.
+3. `Router` - user-facing add/remove liquidity and swaps with slippage/deadline checks.
+4. `RouterV2` - best-path selection for direct and 2-hop routes.
 
-**Docs**
+### Governance and Upgradeability
+1. `DEXGovernance` - delayed execution for sensitive protocol changes.
+2. `DEXTransparentProxyFactory` - helper for transparent proxy deployments.
+3. Transparent proxies for upgradeable modules with per-proxy `ProxyAdmin` control.
 
-1. Architecture: [ARCHITECTURE.md](docs/ARCHITECTURE.md)
-2. Security: [SECURITY.md](docs/SECURITY.md)
-3. Upgrades: [UPGRADES.md](docs/UPGRADES.md)
-4. Configuration: [CONFIG.md](docs/CONFIG.md)
-5. Operations: [OPERATIONS.md](docs/OPERATIONS.md)
-6. FAQ: [FAQ.md](docs/FAQ.md)
-7. Glossary: [GLOSSARY.md](docs/GLOSSARY.md)
-8. Getting Started: [GETTING_STARTED.md](docs/GETTING_STARTED.md)
+### Treasury, Oracle, Extensions
+1. `FeeCollector` - protocol fee accumulation and controlled withdrawals.
+2. `PriceOracle` - TWAP observations and consult API.
+3. `FlashLoanLimiter` - flash output policy bounds.
+4. `LiquidityMining` - optional LP staking incentives.
 
-**Disclaimer**
+## How It Works
+1. A DAO token project creates or reuses a pool for token pairs.
+2. Liquidity providers deposit both assets and receive LP shares.
+3. Traders swap through router endpoints.
+4. Pool output is calculated from constant-product math with fee logic.
+5. Protocol fee portion is sent to treasury.
+6. Oracle tracks cumulative prices for TWAP-based quoting.
+7. Governance can update fee and safety parameters via timelock.
 
-This repository contains the core smart contracts of the protocol. The codebase may evolve rapidly, so older guides may not match the current layout. Refer to the latest docs for accurate integration guidance.
+## Security and Upgrade Model
+1. `SafeERC20`, custom errors, and explicit input checks.
+2. `ReentrancyGuard` on critical mutative methods.
+3. `PausableUpgradeable` across key modules.
+4. Router and pool flows respect factory pause state.
+5. Transparent proxy architecture with EIP-1967 slot verifiability.
+6. Storage gaps reserved for future upgrades.
 
-**License**
+## Quick Start
 
-2025 BERT info@tenyokj
+### Requirements
+1. `node >= 22.10`
+2. `npm`
+
+### Install
+```bash
+npm i
+```
+
+### Compile
+```bash
+npm run compile
+```
+
+### Run tests
+```bash
+npm test
+```
+
+### Coverage
+```bash
+npm run coverage
+```
+
+## Deployment and Upgrade
+
+### Local deployment
+1. Run local chain:
+```bash
+npx hardhat node
+```
+2. Deploy protocol:
+```bash
+npm run deploy:dex:local
+```
+3. Verify wiring:
+```bash
+npm run verify:dex:local
+```
+
+### Sepolia deployment
+```bash
+npm run deploy:dex:sepolia
+npm run verify:dex:sepolia
+```
+
+### Proxy upgrade
+Use environment variables (Hardhat v3 custom params style):
+
+```bash
+PROXY_ADMIN=0x... \
+PROXY=0x... \
+IMPL=RouterV3 \
+npm run upgrade:dex:local
+```
+
+With post-upgrade call:
+
+```bash
+PROXY_ADMIN=0x... \
+PROXY=0x... \
+IMPL=RouterV3 \
+CALL='initializeV3(uint256)' \
+ARGS='[123]' \
+npm run upgrade:dex:local
+```
+
+## Documentation Map
+
+### Main docs
+1. [Getting Started](./docs/GETTING_STARTED.md)
+2. [Architecture](./docs/ARCHITECTURE.md)
+3. [Config](./docs/CONFIG.md)
+4. [Operations](./docs/OPERATIONS.md)
+5. [Security](./docs/SECURITY.md)
+6. [Upgrades](./docs/UPGRADES.md)
+7. [FAQ](./docs/FAQ.md)
+8. [Glossary](./docs/GLOSSARY.md)
+
+### Contracts docs
+1. [Contracts Navigation](./docs/CONTRACTS.md)
+
+### DevOps docs
+1. [Deploy Guide](./scripts/dex/docs_deploy/DEPLOY.md)
+2. [Deploy Scripts Index](./scripts/dex/docs_deploy/INDEX.md)
+3. [Testing Guide](./test/docs_tests/TESTING.md)
+
+## Roadmap
+1. More advanced route search (multi-hop >2 and liquidity-aware ranking).
+2. Additional risk controls for flash swap and pool-level limits.
+3. Better analytics surface for fee and volume dashboards.
+4. Optional frontend and SDK integration package.
+
+## Disclaimer
+This codebase is designed for developer usage and public testing on Sepolia. It follows strong Solidity engineering practices, but it is not positioned as audited mainnet production infrastructure by default. Always review the latest docs and run your own risk checks before integration.
+
+## License
+
+2026 AlsoSwap Contributors
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 of the License, or any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the [GNU General Public License](./LICENSE) for details.
 
-You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
-
+If you did not receive a copy, see: https://www.gnu.org/licenses/

@@ -1,32 +1,39 @@
-# FlashAlliance Operations
+**Operations Guide**
 
-**Daily Operations**
-1. Monitor new alliances created via `AllianceFactory`.
-2. Track alliance state transitions (`Funding` -> `Acquired` -> `Closed`).
-3. Verify critical events: `NFTBought`, `SaleExecuted`, `FundingCancelled`, `EmergencyWithdrawn`.
+**Contents**
+1. Daily Checks
+2. Incident Flow
+3. Pause and Recovery
+4. Monitoring Signals
+5. Operational Checklist
 
-**Runbook: New Alliance**
-1. Ensure participants and shares are correct (sum must be 100).
-2. Create alliance through factory.
-3. Record alliance address and owner/admin address.
+**Daily Checks**
+1. Confirm core proxies are reachable
+2. Confirm factory/router pause status
+3. Confirm fee receiver and fee bps values
+4. Confirm oracle observations are updating
 
-**Runbook: Funding Failure**
-1. Wait until funding deadline passes.
-2. Participant calls `cancelFunding`.
-3. Each participant calls `withdrawRefund`.
+**Incident Flow**
+1. Detect abnormal swaps, fee behavior, or failed tx spikes
+2. Pause affected modules (`Router`, `PoolFactory`, governance paths)
+3. Identify root cause and impacted contracts
+4. Patch and redeploy implementation
+5. Upgrade proxy and run post-upgrade checks
+6. Unpause and monitor recovery window
 
-**Runbook: Sale Execution**
-1. Seller approves NFT to alliance.
-2. Participant buys NFT through `buyNFT`.
-3. Participants vote via `voteToSell`.
-4. Buyer approves ERC20 to alliance.
-5. Participant executes sale via `executeSale`.
+**Pause and Recovery**
+1. Pause first, then communicate, then patch
+2. Keep treasury withdrawal path for emergency operations
+3. Resume in stages: factory/router first, then optional modules
 
-**Runbook: Emergency Rescue**
-1. Participants vote recipient using `voteEmergencyWithdraw`.
-2. Once quorum is reached, call `emergencyWithdrawNFT`.
+**Monitoring Signals**
+1. Pool reserve drift vs expected invariant behavior
+2. Failed transaction ratio on router swap paths
+3. Unexpected fee spikes or fee receiver changes
+4. Governance queue with suspicious admin actions
 
-**Observability**
-1. Index alliance addresses from `AllianceCreated`.
-2. Index voting and emergency events to show current proposal status.
-3. Alert on stalled alliances close to deadline without target reached.
+**Operational Checklist**
+1. Run deploy verification script after each change
+2. Re-run test suite before every upgrade
+3. Record proxy, implementation, and ProxyAdmin addresses
+4. Keep upgrade logs and tx hashes in release notes

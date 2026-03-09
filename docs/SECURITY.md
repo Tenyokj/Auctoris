@@ -1,24 +1,43 @@
-# FlashAlliance Security Notes
+**Security Overview**
 
-**Threat Model**
-1. Participants are semi-trusted and can coordinate voting.
-2. Owner/admin is trusted for pause controls.
-3. External token/NFT contracts are trusted only by interface assumptions.
+**Contents**
+1. Security Model
+2. Runtime Protections
+3. Upgrade Protections
+4. Governance and Admin Risk
+5. Known Tradeoffs
+6. Recommended Practices
 
-**Built-in Protections**
-1. `ReentrancyGuard` on sensitive state-changing paths.
-2. `SafeERC20` wrappers for token transfers.
-3. `safeTransferFrom` for NFT transfers.
-4. Share sum validation (`== 100`) at construction.
-5. Participant-only gating on core actions.
+**Security Model**
+1. Protocol follows AMM best practices for testnet usage
+2. Critical paths use OpenZeppelin guards and safe token ops
+3. Router and pool enforce deadline/slippage boundaries
 
-**Known Trust Assumptions**
-1. Admin can pause and unpause operations.
-2. Participants are fixed at deployment (no dynamic membership management).
-3. ERC20 token and NFT contracts behave according to standards.
+**Runtime Protections**
+1. `ReentrancyGuard` for critical mutative flows
+2. `SafeERC20` for token transfers
+3. `PausableUpgradeable` for emergency shutdown
+4. Factory pause propagated to router and pools
+5. Flash swap amount bounded by optional limiter
 
-**Operational Recommendations**
-1. Use multisig as alliance admin for production.
-2. Pre-verify participant list and shares before deployment.
-3. Add monitoring for deadline and proposal expiry.
-4. Prefer audited token/NFT contracts in non-test environments.
+**Upgrade Protections**
+1. Transparent proxy pattern via OpenZeppelin
+2. Per-proxy `ProxyAdmin` ownership checks
+3. Storage gaps in all upgradeable contracts
+4. Upgrade script verifies EIP-1967 slots after tx
+
+**Governance and Admin Risk**
+1. Admin can change fee parameters and pause system
+2. Timelock in governance reduces sudden-parameter risk
+3. ProxyAdmin key compromise is critical risk
+
+**Known Tradeoffs**
+1. System targets Sepolia and developer workflows
+2. Not optimized for mainnet MEV-hardening
+3. Route optimization is limited to direct and 2-hop paths
+
+**Recommended Practices**
+1. Use multisig for owner and ProxyAdmin control
+2. Enforce delay for sensitive config changes
+3. Track reserve anomalies and failed tx rate
+4. Rehearse upgrades on localhost and Sepolia first

@@ -1,61 +1,70 @@
-# FlashAlliance Architecture
+**Architecture Overview**
 
 **Contents**
-1. System Components
-2. Lifecycle
-3. Data Model
-4. Access Control
-5. Voting and Quorum
-6. Failure and Emergency Paths
-7. Diagram
+1. System Flow
+2. Core Modules
+3. Core Responsibilities
+4. Data Flow
+5. Access and Trust Boundaries
+6. Upgradeability Model
+7. Diagram (ASCII)
 
-**System Components**
-1. `AllianceFactory` deploys and tracks alliance instances.
-2. `Alliance` manages funding, NFT acquisition, sale voting, and proceeds distribution.
-3. `TenyokjToken` is an ERC20 used for funding and settlement.
-4. `ERC721Mock` is a test helper NFT contract.
+**System Flow**
+1. User sends action to `Router` or `RouterV2`
+2. Router resolves pools through `PoolFactory`
+3. `LiquidityPool` executes add/remove/swap logic
+4. Pool updates reserves and cumulative prices
+5. Protocol fee is routed to `FeeCollector`
+6. `PriceOracle` consumes cumulative data for TWAP
+7. `DEXGovernance` changes admin parameters with timelock
 
-**Lifecycle**
-1. `Funding`:
-   Participants deposit ERC20 up to `targetPrice` before `deadline`.
-2. `Acquired`:
-   NFT is purchased when funding target is reached.
-3. `Closed`:
-   Final state after sale execution, emergency withdrawal, or failed funding cancellation.
+**Core Modules**
+1. Core: `PoolFactory`, `LiquidityPool`, `Router`, `RouterV2`
+2. Governance: `DEXGovernance`, `DEXTransparentProxyFactory`
+3. Treasury and Oracle: `FeeCollector`, `PriceOracle`
+4. Extensions: `FlashLoanLimiter`, `LiquidityMining`
+5. Shared: interfaces and `DEXErrors`
 
-**Data Model**
-1. Participant set and fixed shares are immutable after deployment.
-2. Deposits are tracked in `contributed[address]`.
-3. Sale proposal data is tracked in `proposedBuyer`, `proposedPrice`, `proposedSaleDeadline`.
-4. Voting weight is share-based (`sharePercent[address]`).
+**Core Responsibilities**
+1. `PoolFactory` creates pools and stores global fee/pause config
+2. `LiquidityPool` stores reserves and executes AMM math
+3. `Router` provides user-friendly add/remove/swap methods
+4. `RouterV2` selects best direct or 2-hop path
+5. `FeeCollector` receives protocol fee share
+6. `PriceOracle` exposes TWAP quote API
 
-**Access Control**
-1. `Ownable` owner (admin) can pause/unpause.
-2. `onlyParticipant` gates business actions.
-3. Sale/emergency decisions are participant-vote based.
+**Data Flow**
+1. Factory stores pool registry and protocol config
+2. Pools store reserves, LP balances, TWAP cumulatives
+3. Router stores no long-term market state
+4. Treasury stores collected fees
+5. Governance stores queued actions and ETA
 
-**Voting and Quorum**
-1. Normal sale (`price >= minSalePrice`) requires `quorumPercent` (default 60).
-2. Loss sale (`price < minSalePrice`) requires `lossSaleQuorumPercent` (default 80).
-3. Emergency withdrawal requires `quorumPercent`.
+**Access and Trust Boundaries**
+1. `OwnableUpgradeable` protects admin functions
+2. `PausableUpgradeable` protects emergency paths
+3. Pool critical methods also check factory pause status
+4. Upgrade rights are controlled by per-proxy `ProxyAdmin`
 
-**Failure and Emergency Paths**
-1. If target is not reached by deadline, any participant can call `cancelFunding`.
-2. Participants reclaim own deposits via `withdrawRefund`.
-3. In `Acquired`, participants can vote an emergency recipient and transfer NFT out.
+**Upgradeability Model**
+1. `PoolFactory`, `Router`, `RouterV2`, `FeeCollector`, `PriceOracle`, `FlashLoanLimiter`, `DEXGovernance` are upgradeable
+2. `LiquidityPool` pair contracts are immutable (non-upgradeable instances)
+3. Upgradeable contracts keep storage gaps for future versions
 
-**Diagram**
+**Diagram (ASCII)**
 ```text
-Participants
-   | (deposit ERC20)
-   v
-Alliance (Funding) ----> cancelFunding ----> Closed + withdrawRefund
-   |
-   | buyNFT (when target reached)
-   v
-Alliance (Acquired)
-   |                       \
-   | voteToSell + executeSale \ voteEmergencyWithdraw + emergencyWithdrawNFT
-   v                           v
-Closed (proceeds split)       Closed (NFT rescued)
+User
+  |
+  v
+Router / RouterV2
+  |
+  v
+PoolFactory -----> LiquidityPool(s)
+  |                    |
+  |                    +--> FeeCollector
+  |                    +--> PriceOracle (cumulative source)
+  |
+  +--> global config (fees, pause, limiter)
+
+DEXGovernance (timelock) --> PoolFactory admin actions
 ```

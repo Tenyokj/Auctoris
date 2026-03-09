@@ -1,28 +1,28 @@
-# FlashAlliance Glossary
+**Glossary**
 
-**Alliance**
-One deployed pool contract with fixed participants and shares.
+**AMM**
+Automated market maker with reserve-based pricing.
 
-**Participant**
-Address allowed to execute alliance business operations.
+**LP Token**
+Pool share token minted to liquidity providers.
 
-**Share**
-Participant voting/payout weight in percent; total across participants is 100.
+**TWAP**
+Time-weighted average price from cumulative observations.
 
-**Funding State**
-Initial period where participants deposit ERC20 toward target.
+**BPS**
+Basis points where `1 bps = 0.01%`.
 
-**Acquired State**
-State after NFT purchase; sale voting and emergency flow become available.
+**Transparent Proxy**
+Upgradeable proxy where admin and user calls are separated.
 
-**Closed State**
-Final state after sale, emergency withdrawal, or failed funding cancellation.
+**ProxyAdmin**
+Admin contract that executes proxy upgrades.
 
-**Normal Sale**
-Sale proposal with `price >= minSalePrice` and lower quorum requirement.
+**EIP-1967 Slots**
+Standard storage slots for proxy admin and implementation.
 
-**Loss Sale**
-Sale proposal with `price < minSalePrice` and higher quorum requirement.
+**Flash Swap**
+Borrow-and-return-in-one-transaction swap callback flow.
 
-**Emergency Withdrawal**
-Participant-voted path to transfer NFT to designated recipient when sale flow is not used.
+**Slippage**
+Difference between expected and executed output amount.
