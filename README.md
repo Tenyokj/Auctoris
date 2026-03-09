@@ -13,19 +13,6 @@ It provides a full on-chain stack for token listing, liquidity provisioning, and
 
 This repository contains the core protocol contracts, deployment scripts, upgrade scripts, verification scripts, and high-coverage test suites.
 
-## Table of Contents
-1. [Why AlsoSwap](#why-alsoswap)
-2. [What You Can Do](#what-you-can-do)
-3. [Protocol Components](#protocol-components)
-4. [How It Works](#how-it-works)
-5. [Security and Upgrade Model](#security-and-upgrade-model)
-6. [Quick Start](#quick-start)
-7. [Deployment and Upgrade](#deployment-and-upgrade)
-8. [Documentation Map](#documentation-map)
-9. [Roadmap](#roadmap)
-10. [Disclaimer](#disclaimer)
-11. [License](#license)
-
 ## Why AlsoSwap
 1. Built for DAO token ecosystems: easy onboarding of project tokens into AMM pools.
 2. Real liquidity and market-driven pricing: pool reserves define executable spot price.
@@ -41,24 +28,6 @@ This repository contains the core protocol contracts, deployment scripts, upgrad
 6. Query TWAP from `PriceOracle` for safer external pricing usage.
 7. Control protocol parameters with timelocked governance flows.
 
-## Protocol Components
-
-### Core
-1. `PoolFactory` - pool registry, global fees, fee receiver, limiter, pause root.
-2. `LiquidityPool` - AMM reserves, LP token mint/burn, swap, flash swap, cumulative pricing.
-3. `Router` - user-facing add/remove liquidity and swaps with slippage/deadline checks.
-4. `RouterV2` - best-path selection for direct and 2-hop routes.
-
-### Governance and Upgradeability
-1. `DEXGovernance` - delayed execution for sensitive protocol changes.
-2. `DEXTransparentProxyFactory` - helper for transparent proxy deployments.
-3. Transparent proxies for upgradeable modules with per-proxy `ProxyAdmin` control.
-
-### Treasury, Oracle, Extensions
-1. `FeeCollector` - protocol fee accumulation and controlled withdrawals.
-2. `PriceOracle` - TWAP observations and consult API.
-3. `FlashLoanLimiter` - flash output policy bounds.
-4. `LiquidityMining` - optional LP staking incentives.
 
 ## How It Works
 1. A DAO token project creates or reuses a pool for token pairs.
@@ -68,83 +37,6 @@ This repository contains the core protocol contracts, deployment scripts, upgrad
 5. Protocol fee portion is sent to treasury.
 6. Oracle tracks cumulative prices for TWAP-based quoting.
 7. Governance can update fee and safety parameters via timelock.
-
-## Security and Upgrade Model
-1. `SafeERC20`, custom errors, and explicit input checks.
-2. `ReentrancyGuard` on critical mutative methods.
-3. `PausableUpgradeable` across key modules.
-4. Router and pool flows respect factory pause state.
-5. Transparent proxy architecture with EIP-1967 slot verifiability.
-6. Storage gaps reserved for future upgrades.
-
-## Quick Start
-
-### Requirements
-1. `node >= 22.10`
-2. `npm`
-
-### Install
-```bash
-npm i
-```
-
-### Compile
-```bash
-npm run compile
-```
-
-### Run tests
-```bash
-npm test
-```
-
-### Coverage
-```bash
-npm run coverage
-```
-
-## Deployment and Upgrade
-
-### Local deployment
-1. Run local chain:
-```bash
-npx hardhat node
-```
-2. Deploy protocol:
-```bash
-npm run deploy:dex:local
-```
-3. Verify wiring:
-```bash
-npm run verify:dex:local
-```
-
-### Sepolia deployment
-```bash
-npm run deploy:dex:sepolia
-npm run verify:dex:sepolia
-```
-
-### Proxy upgrade
-Use environment variables (Hardhat v3 custom params style):
-
-```bash
-PROXY_ADMIN=0x... \
-PROXY=0x... \
-IMPL=RouterV3 \
-npm run upgrade:dex:local
-```
-
-With post-upgrade call:
-
-```bash
-PROXY_ADMIN=0x... \
-PROXY=0x... \
-IMPL=RouterV3 \
-CALL='initializeV3(uint256)' \
-ARGS='[123]' \
-npm run upgrade:dex:local
-```
 
 ## Documentation Map
 
