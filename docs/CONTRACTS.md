@@ -1,22 +1,105 @@
-**Contract Documentations**
+# Tenji Contracts
 
-**Core Modules**
-1. [PoolFactory](../contracts/dex/docs_contracts/PoolFactory.md)
-2. [LiquidityPool](../contracts/dex/docs_contracts/LiquidityPool.md)
-3. [Router](../contracts/dex/docs_contracts/Router.md)
-4. [RouterV2](../contracts/dex/docs_contracts/RouterV2.md)
+## Overview
 
-**Governance**
-1. [DEXGovernance](../contracts/dex/docs_contracts/DEXGovernance.md)
-2. [DEXTransparentProxyFactory](../contracts/dex/docs_contracts/DEXTransparentProxyFactory.md)
+The repository currently centers around three Solidity contracts:
 
-**Treasury and Oracle**
-1. [FeeCollector](../contracts/dex/docs_contracts/FeeCollector.md)
-2. [PriceOracle](../contracts/dex/docs_contracts/PriceOracle.md)
+- `TenjiCoin`
+- `TenjiAirdrop`
+- `AirdropClaimCaller`
 
-**Extensions**
-1. [FlashLoanLimiter](../contracts/dex/docs_contracts/FlashLoanLimiter.md)
-2. [LiquidityMining](../contracts/dex/docs_contracts/LiquidityMining.md)
+There is also `MockERC20` for test scenarios.
 
-**Shared**
-1. [DEXErrors](../contracts/dex/docs_contracts/DEXErrors.md)
+## `TenjiCoin`
+
+File: `contracts/TenjiCoin.sol`
+
+Purpose:
+
+- create the main `TENJI` token
+- mint the full initial supply once
+- expose standard ERC-20 functionality
+- allow token burning by holders
+
+Key properties:
+
+- fixed total supply of `167,000,000,000 TENJI`
+- initial split of `60/10/30`
+- no post-deploy mint function
+- no transfer tax
+- no blacklist
+- no pause logic
+
+Constructor arguments:
+
+- `liquidityWallet`
+- `teamWallet`
+- `airdropWallet`
+
+## `TenjiAirdrop`
+
+File: `contracts/TenjiAirdrop.sol`
+
+Purpose:
+
+- hold the airdrop reserve
+- distribute fixed-size claims
+- block duplicate claims
+- reject contract-based callers
+
+Core state:
+
+- `token`
+- `amountPerUser`
+- `maxUsers`
+- `claimedCount`
+- `hasClaimed`
+- `lastClaimBlock`
+- `cooldownBlocks`
+
+Main functions:
+
+- `claim()`
+- `remainingTokens()`
+- `canClaim(address user)`
+- `setCooldown(uint256 blocks)`
+
+Owner powers:
+
+- update cooldown only
+
+## `AirdropClaimCaller`
+
+File: `contracts/AirdropClaimCaller.sol`
+
+Purpose:
+
+- call `claim()` from another contract
+- prove that the anti-contract guard works during tests
+
+This contract is a helper, not a required production component.
+
+## `MockERC20`
+
+File: `contracts/MockERC20.sol`
+
+Purpose:
+
+- support unit tests
+- provide mintable test balances without using the production token flow
+
+## Architectural Notes
+
+The current architecture is intentionally small.
+
+Benefits:
+
+- easier to inspect
+- easier to document
+- smaller surface area than feature-heavy meme token contracts
+
+Tradeoff:
+
+- fewer admin controls
+- fewer built-in operational safety switches
+- no advanced distribution tooling beyond the current airdrop logic

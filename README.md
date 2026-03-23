@@ -1,78 +1,121 @@
-![AlsoSwap v1.0.0](https://img.shields.io/badge/AlsoSwap-v1.0.0-0EA5E9) ![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-green)
-![Node.js >=22](https://img.shields.io/badge/Node.js->=22-brightgreen) ![TypeScript 5.8.0](https://img.shields.io/badge/TypeScript-5.8.0-3178C6) ![Hardhat 3.0.15](https://img.shields.io/badge/Hardhat-3.0.15-yellow)
-![Solidity ^0.8.20](https://img.shields.io/badge/Solidity-^0.8.20-orange) ![Upgradeable: Transparent Proxy](https://img.shields.io/badge/Upgradeable-Transparent%20Proxy-blueviolet) ![DEX](https://img.shields.io/badge/DeFi-AMM%20DEX-purple)
-![Ethers 6.15.0](https://img.shields.io/badge/Ethers-6.15.0-3C3C3D) ![Tests: Unit passing](https://img.shields.io/badge/Tests%3A%20Unit-passing-success) ![Coverage >95%](https://img.shields.io/badge/Coverage-%3E95%25-success)
+![LOGO](./docs/tenji-turttle.png)
 
-![AlsoSwap Banner](./docs/assets/alsoswap.png)
+![License: MIT](https://img.shields.io/badge/License-MIT-059669.svg)
+![CI: GitHub Actions](https://img.shields.io/badge/CI-GitHub%20Actions-111827?logo=githubactions&logoColor=2088FF)
+![Solidity: 0.8.27](https://img.shields.io/badge/Solidity-0.8.27-363636?logo=solidity)
+![Hardhat: 3.0.15](https://img.shields.io/badge/Hardhat-3.0.15-F7DF1E)
+![Node.js >=22.10](https://img.shields.io/badge/Node.js-%3E%3D22.10-5FA04E?logo=node.js&logoColor=white)
+![Standard: ERC-20](https://img.shields.io/badge/Standard-ERC--20-2563EB)
+![Network: Sepolia](https://img.shields.io/badge/Network-Sepolia-627EEA?logo=ethereum&logoColor=white)
 
-# AlsoSwap Protocol
+#                                   TenjiCoin Core
 
-**AlsoSwap Protocol** is an upgradeable AMM DEX for DAO and community ERC20 tokens in Ethereum Sepolia.
+TenjiCoin is a meme token built around a simple idea: the market moves too fast for most people.
 
-It provides a full on-chain stack for token listing, liquidity provisioning, and token exchange with constant-product pricing. Projects can launch pools for governance tokens, LPs can provide liquidity and earn fees, and users can swap tokens through a router with slippage/deadline controls.
+Tenji is the turtle that always arrives one candle too late. It is not a mascot for perfect execution or flawless alpha. It is a mascot for the trader who misses the clean entry, hesitates on the exit, and still shows up for the next trade.
 
-This repository contains the core protocol contracts, deployment scripts, upgrade scripts, verification scripts, and high-coverage test suites.
+This repository contains the on-chain core of the Tenji project:
 
-## Why AlsoSwap
-1. Built for DAO token ecosystems: easy onboarding of project tokens into AMM pools.
-2. Real liquidity and market-driven pricing: pool reserves define executable spot price.
-3. Practical developer stack: routers, oracle, governance, and proxy-based upgrades.
-4. Testnet-first safety: strong engineering practices without mainnet-level economic assumptions.
+- `TenjiCoin`, a fixed-supply ERC-20 token with burn support
+- `TenjiAirdrop`, an airdrop contract with single-claim enforcement and basic anti-bot rules
+- `AirdropClaimCaller`, a helper contract used to test contract-call rejection
+- Hardhat deployment scripts, tests, and repo-level docs
 
-## What You Can Do
-1. Create pools for any ERC20 pair through `PoolFactory`.
-2. Add and remove liquidity with LP share accounting.
-3. Swap tokens via `Router` and optimized `RouterV2` paths.
-4. Swap ETH paths through WETH wrappers.
-5. Use flash swap mechanics for advanced integrations.
-6. Query TWAP from `PriceOracle` for safer external pricing usage.
-7. Control protocol parameters with timelocked governance flows.
+## Why Tenji Exists
 
+The crypto market moves fast.
+Too fast for most people.
 
-## How It Works
-1. A DAO token project creates or reuses a pool for token pairs.
-2. Liquidity providers deposit both assets and receive LP shares.
-3. Traders swap through router endpoints.
-4. Pool output is calculated from constant-product math with fee logic.
-5. Protocol fee portion is sent to treasury.
-6. Oracle tracks cumulative prices for TWAP-based quoting.
-7. Governance can update fee and safety parameters via timelock.
+Tenji exists for those who are always one step behind, not because they are stupid, but because the market never waits.
 
-## Documentation Map
+This is not a token about winning every trade.
+It is a token about being late and still showing up.
 
-### Main docs
-1. [Getting Started](./docs/GETTING_STARTED.md)
-2. [Architecture](./docs/ARCHITECTURE.md)
-3. [Config](./docs/CONFIG.md)
-4. [Operations](./docs/OPERATIONS.md)
-5. [Security](./docs/SECURITY.md)
-6. [Upgrades](./docs/UPGRADES.md)
-7. [FAQ](./docs/FAQ.md)
-8. [Glossary](./docs/GLOSSARY.md)
+## Core Facts
 
-### Contracts docs
-1. [Contracts Navigation](./docs/CONTRACTS.md)
+- Token name: `TenjiCoin`
+- Symbol: `TENJI`
+- Standard: ERC-20
+- Decimals: 18
+- Total supply: `167,000,000,000 TENJI`
+- Supply model: fixed at deployment
+- Minting after deployment: not supported
+- Burn support: enabled for token holders
+- Taxes or transfer fees: none
 
-### DevOps docs
-1. [Deploy Guide](./scripts/dex/docs_deploy/DEPLOY.md)
-2. [Deploy Scripts Index](./scripts/dex/docs_deploy/INDEX.md)
-3. [Testing Guide](./test/docs_tests/TESTING.md)
+## Initial Allocation
 
-## Roadmap
-1. More advanced route search (multi-hop >2 and liquidity-aware ranking).
-2. Additional risk controls for flash swap and pool-level limits.
-3. Better analytics surface for fee and volume dashboards.
-4. Optional frontend and SDK integration package.
+- Liquidity: `60%` or `100,200,000,000 TENJI`
+- Team: `10%` or `16,700,000,000 TENJI`
+- Airdrop reserve: `30%` or `50,100,000,000 TENJI`
+
+The deployment flow predicts the future `TenjiAirdrop` address and mints the full airdrop reserve directly into that contract during token deployment.
+
+## Repository Map
+
+- [Litepaper](./docs/litepaper.md)
+- [Tokenomics](./docs/tokenomics.md)
+- [Airdrop](./docs/airdrop.md)
+- [Audit Status](./docs/audit.md)
+- [Security](./docs/SECURITY.md)
+- [Deployment](./docs/deployment.md)
+- [Contracts](./docs/CONTRACTS.md)
+- [FAQ](./docs/FAQ.md)
+- [Roadmap](./docs/roadmap.md)
+- [Contributing](./CONTRIBUTING.md)
+- [Changelog](./CHANGELOG.md)
+
+## Quick Start
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the test suite:
+
+```bash
+npm test
+```
+
+Compile contracts:
+
+```bash
+npm run compile
+```
+
+Deploy locally:
+
+```bash
+npm run deploy:tenji:local
+```
+
+Deploy to Sepolia:
+
+```bash
+npm run deploy:tenji:sepolia
+```
+
+After deployment, the script writes contract addresses and deployment metadata to `deployments/<network>.json`.
+
+## What Is In Scope
+
+This repository is focused on the token, the airdrop system, deployment, and testing. The public website, frontend experience, and richer product-facing docs can evolve separately.
+
+## Status
+
+- Core token contract implemented
+- Airdrop contract implemented
+- Deployment flow implemented
+- Unit tests included
+- GitHub Actions CI included
+- Markdown docs included
 
 ## Disclaimer
-This codebase is designed for developer usage and public testing on Sepolia. It follows strong Solidity engineering practices, but it is not positioned as audited mainnet production infrastructure by default. Always review the latest docs and run your own risk checks before integration.
+
+Tenji is a meme-driven crypto project. This repository is not financial advice, not an audited promise of safety, and not a guarantee of future value. Anyone interacting with the contracts should review the code, understand the risks, and make independent decisions.
 
 ## License
 
-2026 AlsoSwap Contributors
-
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 of the License, or any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the [GNU General Public License](./LICENSE) for details.
-
-If you did not receive a copy, see: https://www.gnu.org/licenses/
+MIT. See [LICENSE](./LICENSE).

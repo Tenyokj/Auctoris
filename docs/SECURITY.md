@@ -1,43 +1,72 @@
-**Security Overview**
+# Tenji Security
 
-**Contents**
-1. Security Model
-2. Runtime Protections
-3. Upgrade Protections
-4. Governance and Admin Risk
-5. Known Tradeoffs
-6. Recommended Practices
+## Current Security Posture
 
-**Security Model**
-1. Protocol follows AMM best practices for testnet usage
-2. Critical paths use OpenZeppelin guards and safe token ops
-3. Router and pool enforce deadline/slippage boundaries
+The Tenji contracts are intentionally small and simple, but they should still be treated as unaudited software unless an external audit is completed.
 
-**Runtime Protections**
-1. `ReentrancyGuard` for critical mutative flows
-2. `SafeERC20` for token transfers
-3. `PausableUpgradeable` for emergency shutdown
-4. Factory pause propagated to router and pools
-5. Flash swap amount bounded by optional limiter
+The main security advantage of the current design is limited scope:
 
-**Upgrade Protections**
-1. Transparent proxy pattern via OpenZeppelin
-2. Per-proxy `ProxyAdmin` ownership checks
-3. Storage gaps in all upgradeable contracts
-4. Upgrade script verifies EIP-1967 slots after tx
+- no upgradeability
+- no post-deploy mint function
+- no transfer tax logic
+- no reflection or rebasing
+- no DEX router complexity inside the token
 
-**Governance and Admin Risk**
-1. Admin can change fee parameters and pause system
-2. Timelock in governance reduces sudden-parameter risk
-3. ProxyAdmin key compromise is critical risk
+## Trust Assumptions
 
-**Known Tradeoffs**
-1. System targets Sepolia and developer workflows
-2. Not optimized for mainnet MEV-hardening
-3. Route optimization is limited to direct and 2-hop paths
+Users should understand the following trust boundaries:
 
-**Recommended Practices**
-1. Use multisig for owner and ProxyAdmin control
-2. Enforce delay for sensitive config changes
-3. Track reserve anomalies and failed tx rate
-4. Rehearse upgrades on localhost and Sepolia first
+- `TenjiCoin` does not expose privileged minting after deployment
+- `TenjiAirdrop` owner can update the cooldown value
+- the owner does not control user claim history or token balances directly
+- deployment parameters matter because they shape initial distribution
+
+## Important Invariants
+
+The design relies on these invariants:
+
+- total token supply is fixed at deployment
+- initial allocation is split `60/10/30`
+- the airdrop reserve is minted directly into `TenjiAirdrop`
+- each address can claim only once
+- airdrop claims fail when the pool no longer covers `amountPerUser`
+
+## Known Limitations
+
+## 1. Anti-bot checks are practical, not perfect
+
+The airdrop blocks contract callers by checking `msg.sender.code.length`.
+
+This helps against simple contract wrappers, but it is not a universal Sybil defense and may exclude some smart-wallet users.
+
+## 2. Cooldown is owner-controlled
+
+The owner can change `cooldownBlocks`. This is intentionally narrow admin power, but it still affects claim behavior.
+
+## 3. No pause switch
+
+The current contracts do not implement a pause mechanism. Simplicity reduces complexity, but it also means emergency controls are limited.
+
+## 4. No on-chain vesting for team allocation
+
+The `10%` team allocation is minted directly to the configured wallet. If vesting is desired, it must be handled operationally or by future tooling outside the current contracts.
+
+## Operational Recommendations
+
+- keep deployer keys private and out of version control
+- use a dedicated deployer for live networks
+- verify deployed contracts on the target explorer
+- publish deployed addresses clearly
+- review airdrop parameters before deployment
+- test the full deployment flow on Sepolia before any production-style launch
+
+## User Recommendations
+
+- confirm token and airdrop addresses from official project channels
+- check the airdrop contract balance on-chain
+- verify that `amountPerUser` and `maxUsers` make sense for the intended campaign
+- do not assume smart wallets are supported by the current claim restrictions
+
+## Scope of This Document
+
+This document describes the current repository state only. It is not a formal audit report and does not replace independent review.

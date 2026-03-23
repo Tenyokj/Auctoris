@@ -10,8 +10,19 @@ import hardhatEthersChaiMatchers from "@nomicfoundation/hardhat-ethers-chai-matc
 import hardhatMocha from "@nomicfoundation/hardhat-mocha";
 import hardhatNetworkHelpers from "@nomicfoundation/hardhat-network-helpers";
 import hardhatTypechain from "@nomicfoundation/hardhat-typechain";
+import hardhatVerify from "@nomicfoundation/hardhat-verify";
 
 import type { HardhatUserConfig } from "hardhat/config";
+
+function normalizePrivateKey(value: string | undefined): string | undefined {
+  if (value === undefined || value.trim() === "") {
+    return undefined;
+  }
+
+  return value.startsWith("0x") ? value : `0x${value}`;
+}
+
+const deployerKey = normalizePrivateKey(process.env.DEPLOYER_KEY);
 
 const networks: NonNullable<HardhatUserConfig["networks"]> = {
   hardhat: {
@@ -31,7 +42,7 @@ if (process.env.SEPOLIA_RPC_URL) {
     type: "http",
     url: process.env.SEPOLIA_RPC_URL,
     chainId: 11155111,
-    accounts: process.env.DEPLOYER_KEY ? [process.env.DEPLOYER_KEY] : [],
+    accounts: deployerKey ? [deployerKey] : [],
   };
 }
 
@@ -47,6 +58,16 @@ const config: HardhatUserConfig = {
       },
     },
   networks,
+  verify: {
+    etherscan: process.env.ETHERSCAN_API_KEY
+      ? {
+          enabled: true,
+          apiKey: process.env.ETHERSCAN_API_KEY,
+        }
+      : {
+          enabled: false,
+        },
+  },
  
   plugins: [
     hardhatEthers,
@@ -54,6 +75,7 @@ const config: HardhatUserConfig = {
     hardhatMocha,
     hardhatEthersChaiMatchers,
     hardhatNetworkHelpers,
+    hardhatVerify,
   ],
 };
 
