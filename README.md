@@ -1,12 +1,12 @@
-![LOGO](./docs/tenji-turttle.png)
-
 ![License: MIT](https://img.shields.io/badge/License-MIT-059669.svg)
 ![CI: GitHub Actions](https://img.shields.io/badge/CI-GitHub%20Actions-111827?logo=githubactions&logoColor=2088FF)
 ![Solidity: 0.8.27](https://img.shields.io/badge/Solidity-0.8.27-363636?logo=solidity)
 ![Hardhat: 3.0.15](https://img.shields.io/badge/Hardhat-3.0.15-F7DF1E)
 ![Node.js >=22.10](https://img.shields.io/badge/Node.js-%3E%3D22.10-5FA04E?logo=node.js&logoColor=white)
 ![Standard: ERC-20](https://img.shields.io/badge/Standard-ERC--20-2563EB)
-![Network: Sepolia](https://img.shields.io/badge/Network-Sepolia-627EEA?logo=ethereum&logoColor=white)
+![Network: Sepolia/Testnet](https://img.shields.io/badge/Network-Sepolia-627EEA?logo=ethereum&logoColor=white)
+
+![LOGO](./docs/tenji-turttle.png)
 
 #                                   TenjiCoin Core
 
