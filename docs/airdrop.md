@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`TenjiAirdrop` is the distribution contract for the initial `30%` token reserve allocated to the community side of the project.
+`TenjiAirdrop` is the distribution contract for the fixed `20,000,000,000 TENJI` community allocation of the project.
 
 Its role is intentionally narrow:
 
@@ -17,7 +17,7 @@ During deployment, the script predicts the future `TenjiAirdrop` address and pas
 
 As a result:
 
-- the full `50,100,000,000 TENJI` reserve is minted directly into the airdrop contract
+- the full `20,000,000,000 TENJI` reserve is minted directly into the airdrop contract
 - there is no separate post-deploy funding step
 - the contract balance can be verified immediately after deployment
 
@@ -67,7 +67,8 @@ The owner cannot mint new tokens through the airdrop contract and cannot bypass 
 
 ## Operational Notes
 
-- If `amountPerUser * maxUsers` is lower than the full reserve, not all tokens will be distributed in the first campaign.
+- The intended campaign configuration is `200,000 TENJI * 100,000 users = 20,000,000,000 TENJI`.
+- If `amountPerUser * maxUsers` is lower than the full reserve, not all tokens will be distributed in the current campaign.
 - If `amountPerUser * maxUsers` is higher than the reserve, the deployment script rejects the configuration.
 - Smart wallets and contract accounts may be rejected by design because the contract checks runtime code length.
 

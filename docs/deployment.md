@@ -26,6 +26,7 @@ Required for Sepolia:
 - `DEPLOYER_KEY`
 - `LIQUIDITY_WALLET`
 - `TEAM_WALLET`
+- `RESERVE_WALLET`
 - `AIRDROP_AMOUNT_PER_USER`
 - `AIRDROP_MAX_USERS`
 
@@ -46,7 +47,7 @@ The deployment script performs the following sequence:
 
 1. Connects to the selected network.
 2. Predicts the future address of `TenjiAirdrop`.
-3. Deploys `TenjiCoin`, minting the full `30%` reserve directly to that predicted address.
+3. Deploys `TenjiCoin`, minting `60,000,000,000 TENJI` to liquidity, `20,000,000,000 TENJI` to team, `20,000,000,000 TENJI` directly to the predicted airdrop address, and `67,000,000,000 TENJI` to the reserve wallet.
 4. Deploys `TenjiAirdrop` at the predicted address.
 5. Optionally deploys `AirdropClaimCaller`.
 6. Optionally verifies contracts on Etherscan.
@@ -61,7 +62,7 @@ The deployment script checks:
 - required addresses are valid
 - token amounts are valid decimals
 - integer parameters are positive
-- `amountPerUser * maxUsers` does not exceed the `50,100,000,000 TENJI` airdrop reserve
+- `amountPerUser * maxUsers` does not exceed the `20,000,000,000 TENJI` airdrop reserve
 
 If the planned campaign uses less than the full reserve, the script prints a warning but still deploys.
 
@@ -111,6 +112,7 @@ After deployment, verify:
 - airdrop contract balance
 - liquidity wallet balance
 - team wallet balance
+- reserve wallet balance
 
 Example Hardhat console flow:
 
@@ -129,6 +131,7 @@ ethers.formatUnits(await token.balanceOf(await airdrop.getAddress()), 18)
 
 Expected split:
 
-- liquidity: `100,200,000,000 TENJI`
-- team: `16,700,000,000 TENJI`
-- airdrop: `50,100,000,000 TENJI`
+- liquidity: `60,000,000,000 TENJI`
+- team: `20,000,000,000 TENJI`
+- airdrop: `20,000,000,000 TENJI`
+- reserve: `67,000,000,000 TENJI`

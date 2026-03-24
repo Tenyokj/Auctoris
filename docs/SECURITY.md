@@ -26,8 +26,8 @@ Users should understand the following trust boundaries:
 The design relies on these invariants:
 
 - total token supply is fixed at deployment
-- initial allocation is split `60/10/30`
-- the airdrop reserve is minted directly into `TenjiAirdrop`
+- initial allocation is split into liquidity, team, airdrop, and reserve wallets
+- the `20,000,000,000 TENJI` airdrop reserve is minted directly into `TenjiAirdrop`
 - each address can claim only once
 - airdrop claims fail when the pool no longer covers `amountPerUser`
 
@@ -49,7 +49,11 @@ The current contracts do not implement a pause mechanism. Simplicity reduces com
 
 ## 4. No on-chain vesting for team allocation
 
-The `10%` team allocation is minted directly to the configured wallet. If vesting is desired, it must be handled operationally or by future tooling outside the current contracts.
+The `20,000,000,000 TENJI` team allocation is minted directly to the configured wallet. If vesting is desired, it must be handled operationally or by future tooling outside the current contracts.
+
+## 5. Reserve wallet is operationally sensitive
+
+The `67,000,000,000 TENJI` reserve is minted directly to the configured reserve wallet. That wallet is intended for future liquidity, marketing, and ecosystem operations, so its custody and disclosure matter operationally even though the token contract itself exposes no admin mint path.
 
 ## Operational Recommendations
 

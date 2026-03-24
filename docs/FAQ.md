@@ -38,9 +38,10 @@ Yes. The token includes burn support.
 
 ## How is the supply split initially?
 
-- `60%` liquidity
-- `10%` team
-- `30%` airdrop
+- `60,000,000,000 TENJI` liquidity
+- `20,000,000,000 TENJI` team
+- `20,000,000,000 TENJI` airdrop
+- `67,000,000,000 TENJI` reserve for marketing and future liquidity
 
 ## Does the airdrop contract really hold the full reserve?
 
@@ -48,7 +49,7 @@ Yes. The deployment script predicts the future airdrop address and mints the ful
 
 ## Why might the claim campaign be smaller than the full reserve?
 
-Because the reserve and the active campaign are different things. The reserve is fixed at `50,100,000,000 TENJI`, but the current campaign size is defined by `amountPerUser * maxUsers`.
+Because the reserve and the active campaign are different things. The reserve is fixed at `20,000,000,000 TENJI`, and the current intended campaign is `200,000 TENJI` for `100,000` users.
 
 ## Why can contracts not claim the airdrop?
 

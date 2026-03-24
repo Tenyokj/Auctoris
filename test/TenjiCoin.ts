@@ -8,12 +8,17 @@ import { getConnection } from "./helpers.js";
 
 async function deployTokenFixture() {
     const { ethers } = await getConnection();
-    const [liquidityWallet, teamWallet, airdropWallet, user1, user2] =
+    const [liquidityWallet, teamWallet, airdropWallet, reserveWallet, user1, user2] =
         await ethers.getSigners();
 
     const token = await ethers.deployContract(
         "TenjiCoin",
-        [liquidityWallet.address, teamWallet.address, airdropWallet.address],
+        [
+            liquidityWallet.address,
+            teamWallet.address,
+            airdropWallet.address,
+            reserveWallet.address,
+        ],
         liquidityWallet
     );
 
@@ -23,6 +28,7 @@ async function deployTokenFixture() {
         liquidityWallet,
         teamWallet,
         airdropWallet,
+        reserveWallet,
         user1,
         user2,
     };
@@ -40,24 +46,27 @@ describe("TenjiCoin", function () {
         );
     });
 
-    it("mints the configured 60/10/30 distribution", async function () {
+    it("mints the configured fixed launch distribution", async function () {
         const {
+            ethers,
             token,
             liquidityWallet,
             teamWallet,
             airdropWallet,
+            reserveWallet,
         } = await deployTokenFixture();
 
-        const totalSupply = await token.totalSupply();
-
         expect(await token.balanceOf(liquidityWallet.address)).to.equal(
-            totalSupply * 60n / 100n
+            ethers.parseEther("60000000000")
         );
         expect(await token.balanceOf(teamWallet.address)).to.equal(
-            totalSupply * 10n / 100n
+            ethers.parseEther("20000000000")
         );
         expect(await token.balanceOf(airdropWallet.address)).to.equal(
-            totalSupply * 30n / 100n
+            ethers.parseEther("20000000000")
+        );
+        expect(await token.balanceOf(reserveWallet.address)).to.equal(
+            ethers.parseEther("67000000000")
         );
     });
 
@@ -100,12 +109,17 @@ describe("TenjiCoin", function () {
 
     it("rejects zero liquidity wallet", async function () {
         const { ethers } = await getConnection();
-        const [, teamWallet, airdropWallet, deployer] = await ethers.getSigners();
+        const [, teamWallet, airdropWallet, reserveWallet, deployer] = await ethers.getSigners();
 
         await expect(
             ethers.deployContract(
                 "TenjiCoin",
-                [ethers.ZeroAddress, teamWallet.address, airdropWallet.address],
+                [
+                    ethers.ZeroAddress,
+                    teamWallet.address,
+                    airdropWallet.address,
+                    reserveWallet.address,
+                ],
                 deployer
             )
         ).to.be.revertedWithCustomError(
@@ -116,12 +130,17 @@ describe("TenjiCoin", function () {
 
     it("rejects zero team wallet", async function () {
         const { ethers } = await getConnection();
-        const [liquidityWallet, , airdropWallet] = await ethers.getSigners();
+        const [liquidityWallet, , airdropWallet, reserveWallet] = await ethers.getSigners();
 
         await expect(
             ethers.deployContract(
                 "TenjiCoin",
-                [liquidityWallet.address, ethers.ZeroAddress, airdropWallet.address],
+                [
+                    liquidityWallet.address,
+                    ethers.ZeroAddress,
+                    airdropWallet.address,
+                    reserveWallet.address,
+                ],
                 liquidityWallet
             )
         ).to.be.revertedWithCustomError(
@@ -132,12 +151,38 @@ describe("TenjiCoin", function () {
 
     it("rejects zero airdrop wallet", async function () {
         const { ethers } = await getConnection();
-        const [liquidityWallet, teamWallet] = await ethers.getSigners();
+        const [liquidityWallet, teamWallet, , reserveWallet] = await ethers.getSigners();
 
         await expect(
             ethers.deployContract(
                 "TenjiCoin",
-                [liquidityWallet.address, teamWallet.address, ethers.ZeroAddress],
+                [
+                    liquidityWallet.address,
+                    teamWallet.address,
+                    ethers.ZeroAddress,
+                    reserveWallet.address,
+                ],
+                liquidityWallet
+            )
+        ).to.be.revertedWithCustomError(
+            { interface: (await ethers.getContractFactory("TenjiCoin", liquidityWallet)).interface },
+            "ZeroAddress"
+        );
+    });
+
+    it("rejects zero reserve wallet", async function () {
+        const { ethers } = await getConnection();
+        const [liquidityWallet, teamWallet, airdropWallet] = await ethers.getSigners();
+
+        await expect(
+            ethers.deployContract(
+                "TenjiCoin",
+                [
+                    liquidityWallet.address,
+                    teamWallet.address,
+                    airdropWallet.address,
+                    ethers.ZeroAddress,
+                ],
                 liquidityWallet
             )
         ).to.be.revertedWithCustomError(

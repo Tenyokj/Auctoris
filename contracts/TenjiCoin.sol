@@ -21,6 +21,15 @@ contract TenjiCoin is ERC20, ERC20Burnable {
 
     /// @notice Immutable total token supply minted at deployment
     uint256 public constant TOTAL_SUPPLY = 167_000_000_000 * 10 ** 18;
+    /// @notice Fixed liquidity allocation minted to the liquidity wallet
+    uint256 public constant LIQUIDITY_ALLOCATION = 60_000_000_000 * 10 ** 18;
+    /// @notice Fixed team allocation minted to the team wallet
+    uint256 public constant TEAM_ALLOCATION = 20_000_000_000 * 10 ** 18;
+    /// @notice Fixed airdrop allocation minted to the airdrop contract
+    uint256 public constant AIRDROP_ALLOCATION = 20_000_000_000 * 10 ** 18;
+    /// @notice Remaining supply reserved for marketing, future liquidity, and ecosystem ops
+    uint256 public constant RESERVE_ALLOCATION =
+        TOTAL_SUPPLY - LIQUIDITY_ALLOCATION - TEAM_ALLOCATION - AIRDROP_ALLOCATION;
 
     // ===================== CONSTRUCTOR =====================
 
@@ -29,27 +38,33 @@ contract TenjiCoin is ERC20, ERC20Burnable {
      * @param liquidityWallet Address receiving the liquidity allocation
      * @param teamWallet Address receiving the team allocation
      * @param airdropWallet Address receiving the airdrop allocation
+     * @param reserveWallet Address receiving the reserve allocation
      */
     constructor(
         address liquidityWallet,
         address teamWallet,
-        address airdropWallet
+        address airdropWallet,
+        address reserveWallet
     )
         ERC20("TenjiCoin", "TENJI")
     {
         if (
             liquidityWallet == address(0) ||
             teamWallet == address(0) ||
-            airdropWallet == address(0)
+            airdropWallet == address(0) ||
+            reserveWallet == address(0)
         ) revert ZeroAddress();
 
-        // 60% - liquidity
-        _mint(liquidityWallet, TOTAL_SUPPLY * 60 / 100);
+        // Fixed launch liquidity allocation.
+        _mint(liquidityWallet, LIQUIDITY_ALLOCATION);
 
-        // 10% - team
-        _mint(teamWallet, TOTAL_SUPPLY * 10 / 100);
+        // Fixed team allocation.
+        _mint(teamWallet, TEAM_ALLOCATION);
 
-        // 30% - airdrop
-        _mint(airdropWallet, TOTAL_SUPPLY * 30 / 100);
+        // Fixed airdrop allocation minted directly to the airdrop contract.
+        _mint(airdropWallet, AIRDROP_ALLOCATION);
+
+        // Remaining reserve for marketing, future liquidity, and ecosystem operations.
+        _mint(reserveWallet, RESERVE_ALLOCATION);
     }
 }

@@ -14,9 +14,10 @@ TenjiCoin is designed as a fixed-supply meme token with a simple distribution mo
 
 ## Initial Supply Allocation
 
-- Liquidity: `100,200,000,000 TENJI` or `60%`
-- Team: `16,700,000,000 TENJI` or `10%`
-- Airdrop reserve: `50,100,000,000 TENJI` or `30%`
+- Liquidity: `60,000,000,000 TENJI` or about `35.93%`
+- Team: `20,000,000,000 TENJI` or about `11.98%`
+- Airdrop reserve: `20,000,000,000 TENJI` or about `11.98%`
+- Reserve for marketing and future liquidity: `67,000,000,000 TENJI` or about `40.12%`
 
 These allocations are enforced at deployment by the `TenjiCoin` constructor.
 
@@ -31,7 +32,7 @@ These allocations are enforced at deployment by the `TenjiCoin` constructor.
 
 ## Airdrop Reserve
 
-The full airdrop reserve is minted directly into the `TenjiAirdrop` contract during deployment.
+The full `20,000,000,000 TENJI` airdrop reserve is minted directly into the `TenjiAirdrop` contract during deployment.
 
 That means:
 
@@ -43,7 +44,7 @@ That means:
 
 The reserve and the active campaign are related, but not identical.
 
-The reserve is always `50,100,000,000 TENJI`.
+The reserve is always `20,000,000,000 TENJI`.
 
 The currently claimable portion depends on:
 
@@ -54,7 +55,25 @@ Their product defines how many tokens the current campaign can distribute:
 
 `claimable campaign size = amountPerUser * maxUsers`
 
-If the campaign size is smaller than the full reserve, the remaining tokens stay inside the airdrop contract until a later distribution design is introduced or the project defines a follow-up mechanism.
+The current intended campaign uses:
+
+- `200,000 TENJI` per user
+- `100,000` maximum users
+
+That configuration consumes the full `20,000,000,000 TENJI` airdrop reserve.
+
+## Strategic Reserve
+
+The remaining `67,000,000,000 TENJI` is held in a dedicated reserve wallet.
+
+Its intended role is to support:
+
+- future liquidity additions
+- marketing and growth campaigns
+- ecosystem operations
+- strategic treasury decisions
+
+This reserve is part of the fixed initial supply. It is not future minting.
 
 ## Economic Philosophy
 
@@ -66,6 +85,7 @@ It does not try to hide tokenomics behind complex emissions, auto-liquidity feat
 - visible allocation
 - simple ERC-20 behavior
 - explicit airdrop reserve
+- explicit strategic reserve
 
 ## What Tokenomics Does Not Promise
 

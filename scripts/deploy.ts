@@ -7,14 +7,17 @@ import hre from "hardhat";
 
 const TOKEN_DECIMALS = 18;
 const TOTAL_SUPPLY = 167_000_000_000n * 10n ** BigInt(TOKEN_DECIMALS);
-const LIQUIDITY_ALLOCATION = (TOTAL_SUPPLY * 60n) / 100n;
-const TEAM_ALLOCATION = (TOTAL_SUPPLY * 10n) / 100n;
-const AIRDROP_ALLOCATION = (TOTAL_SUPPLY * 30n) / 100n;
+const LIQUIDITY_ALLOCATION = 60_000_000_000n * 10n ** BigInt(TOKEN_DECIMALS);
+const TEAM_ALLOCATION = 20_000_000_000n * 10n ** BigInt(TOKEN_DECIMALS);
+const AIRDROP_ALLOCATION = 20_000_000_000n * 10n ** BigInt(TOKEN_DECIMALS);
+const RESERVE_ALLOCATION =
+  TOTAL_SUPPLY - LIQUIDITY_ALLOCATION - TEAM_ALLOCATION - AIRDROP_ALLOCATION;
 const LOCAL_NETWORKS = new Set(["default", "hardhat", "localhost"]);
 
 type DeployConfig = {
   liquidityWallet: string;
   teamWallet: string;
+  reserveWallet: string;
   airdropOwner: string;
   amountPerUser: bigint;
   maxUsers: bigint;
@@ -164,6 +167,10 @@ function buildConfig(networkName: string, deployer: string): DeployConfig {
     ? resolveAddress("TEAM_WALLET", process.env.TEAM_WALLET, deployer)
     : requireAddress("TEAM_WALLET", process.env.TEAM_WALLET);
 
+  const reserveWallet = isLocal
+    ? resolveAddress("RESERVE_WALLET", process.env.RESERVE_WALLET, deployer)
+    : requireAddress("RESERVE_WALLET", process.env.RESERVE_WALLET);
+
   const airdropOwner = resolveAddress(
     "AIRDROP_OWNER",
     process.env.AIRDROP_OWNER,
@@ -185,6 +192,7 @@ function buildConfig(networkName: string, deployer: string): DeployConfig {
   return {
     liquidityWallet,
     teamWallet,
+    reserveWallet,
     airdropOwner,
     amountPerUser,
     maxUsers,
@@ -238,17 +246,19 @@ async function main() {
   console.log(`Deployer: ${deployer.address}`);
   console.log(`Liquidity wallet: ${config.liquidityWallet}`);
   console.log(`Team wallet: ${config.teamWallet}`);
+  console.log(`Reserve wallet: ${config.reserveWallet}`);
   console.log(`Airdrop owner: ${config.airdropOwner}`);
   console.log(`Predicted airdrop address: ${predictedAirdropAddress}`);
   console.log(`Airdrop amount per user: ${formatToken(config.amountPerUser)} TENJI`);
   console.log(`Airdrop max users: ${config.maxUsers}`);
   console.log(`Planned claim amount: ${formatToken(plannedClaimAmount)} TENJI`);
   console.log(`Airdrop reserve in contract: ${formatToken(AIRDROP_ALLOCATION)} TENJI`);
+  console.log(`Reserve allocation outside airdrop: ${formatToken(RESERVE_ALLOCATION)} TENJI`);
   console.log(`Verify on deploy: ${config.verifyOnDeploy ? "enabled" : "disabled"}`);
 
   if (plannedClaimAmount > AIRDROP_ALLOCATION) {
     fail(
-      `Planned claim amount exceeds the 30% airdrop reserve (${formatToken(AIRDROP_ALLOCATION)} TENJI)`,
+      `Planned claim amount exceeds the fixed airdrop reserve (${formatToken(AIRDROP_ALLOCATION)} TENJI)`,
     );
   }
 
@@ -264,6 +274,7 @@ async function main() {
       config.liquidityWallet,
       config.teamWallet,
       predictedAirdropAddress,
+      config.reserveWallet,
     ],
     deployer,
   );
@@ -325,6 +336,7 @@ async function main() {
         config.liquidityWallet,
         config.teamWallet,
         predictedAirdropAddress,
+        config.reserveWallet,
       ],
     );
     console.log(`TenjiCoin verification: ${tokenVerified ? "ok" : "failed"}`);
@@ -365,6 +377,8 @@ async function main() {
       liquidityAllocation: LIQUIDITY_ALLOCATION.toString(),
       teamWallet: config.teamWallet,
       teamAllocation: TEAM_ALLOCATION.toString(),
+      reserveWallet: config.reserveWallet,
+      reserveAllocation: RESERVE_ALLOCATION.toString(),
       predictedAirdropAddress,
       airdropAllocation: AIRDROP_ALLOCATION.toString(),
     },
@@ -389,7 +403,10 @@ async function main() {
   console.log(`Token: ${tokenAddress}`);
   console.log(`Airdrop: ${airdropAddress}`);
   console.log(`ClaimCaller: ${claimCallerAddress ?? "not deployed"}`);
-  console.log(`Funding: minted directly to TenjiAirdrop (${formatToken(airdropContractBalance)} TENJI)`);
+  console.log(`Liquidity allocation: ${formatToken(LIQUIDITY_ALLOCATION)} TENJI`);
+  console.log(`Team allocation: ${formatToken(TEAM_ALLOCATION)} TENJI`);
+  console.log(`Airdrop allocation: ${formatToken(airdropContractBalance)} TENJI`);
+  console.log(`Reserve allocation: ${formatToken(RESERVE_ALLOCATION)} TENJI`);
   console.log(
     `Verification: ${config.verifyOnDeploy ? `token=${tokenVerified}, airdrop=${airdropVerified}, claimCaller=${claimCallerVerified}` : "skipped"}`,
   );

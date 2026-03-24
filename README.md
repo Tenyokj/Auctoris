@@ -45,11 +45,12 @@ It is a token about being late and still showing up.
 
 ## Initial Allocation
 
-- Liquidity: `60%` or `100,200,000,000 TENJI`
-- Team: `10%` or `16,700,000,000 TENJI`
-- Airdrop reserve: `30%` or `50,100,000,000 TENJI`
+- Liquidity: `60,000,000,000 TENJI` or about `35.93%`
+- Team: `20,000,000,000 TENJI` or about `11.98%`
+- Airdrop reserve: `20,000,000,000 TENJI` or about `11.98%`
+- Reserve for marketing and future liquidity: `67,000,000,000 TENJI` or about `40.12%`
 
-The deployment flow predicts the future `TenjiAirdrop` address and mints the full airdrop reserve directly into that contract during token deployment.
+The deployment flow predicts the future `TenjiAirdrop` address and mints the fixed `20,000,000,000 TENJI` airdrop reserve directly into that contract during token deployment. The remaining reserve is minted to a dedicated reserve wallet for future liquidity, marketing, and ecosystem operations.
 
 ## Repository Map
 

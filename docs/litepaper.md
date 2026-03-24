@@ -6,7 +6,7 @@ Tenji is a meme token built around a familiar crypto truth: most traders are lat
 
 The market moves fast, narratives rotate faster, and execution punishes hesitation. Tenji turns that shared pain into identity. The turtle mascot is not a symbol of ignorance. It is a symbol of delayed action, emotional timing, and the experience of watching the move happen just before you click.
 
-TenjiCoin gives that idea an on-chain form through a fixed-supply ERC-20 token, a publicly visible airdrop reserve, and a deliberately simple architecture.
+TenjiCoin gives that idea an on-chain form through a fixed-supply ERC-20 token, a publicly visible airdrop reserve, a strategic reserve wallet, and a deliberately simple architecture.
 
 ## The Problem
 
@@ -75,9 +75,10 @@ TenjiCoin has a fixed total supply of `167,000,000,000 TENJI`.
 
 Initial allocation:
 
-- `60%` to liquidity
-- `10%` to team
-- `30%` to airdrop
+- `60,000,000,000 TENJI` to liquidity
+- `20,000,000,000 TENJI` to team
+- `20,000,000,000 TENJI` to airdrop
+- `67,000,000,000 TENJI` to reserve for future liquidity, marketing, and operations
 
 The token supports burning by holders, but it does not support additional minting after deployment.
 
@@ -91,7 +92,7 @@ The airdrop contract is designed for a straightforward distribution phase:
 - owner-controlled cooldown updates
 - no hidden distribution math
 
-The full airdrop reserve is minted directly into the airdrop contract during deployment.
+The full `20,000,000,000 TENJI` airdrop reserve is minted directly into the airdrop contract during deployment.
 
 ## Security Position
 

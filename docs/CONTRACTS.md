@@ -24,7 +24,7 @@ Purpose:
 Key properties:
 
 - fixed total supply of `167,000,000,000 TENJI`
-- initial split of `60/10/30`
+- fixed launch split of `60B / 20B / 20B / 67B`
 - no post-deploy mint function
 - no transfer tax
 - no blacklist
@@ -35,6 +35,7 @@ Constructor arguments:
 - `liquidityWallet`
 - `teamWallet`
 - `airdropWallet`
+- `reserveWallet`
 
 ## `TenjiAirdrop`
 
