@@ -1,72 +1,124 @@
-![License: MIT](https://img.shields.io/badge/License-MIT-059669.svg)
-![CI: GitHub Actions](https://img.shields.io/badge/CI-GitHub%20Actions-111827?logo=githubactions&logoColor=2088FF)
-![Solidity: 0.8.27](https://img.shields.io/badge/Solidity-0.8.27-363636?logo=solidity)
-![Hardhat: 3.0.15](https://img.shields.io/badge/Hardhat-3.0.15-F7DF1E)
-![Node.js >=22.10](https://img.shields.io/badge/Node.js-%3E%3D22.10-5FA04E?logo=node.js&logoColor=white)
-![Standard: ERC-20](https://img.shields.io/badge/Standard-ERC--20-2563EB)
-![Network: Sepolia/Testnet](https://img.shields.io/badge/Network-Sepolia-627EEA?logo=ethereum&logoColor=white)
+<p align="center">
+  <img src="./public/SCSL_logo.png" alt="SCSL logo" width="220" />
+</p>
 
-![LOGO](./docs/tenji-turttle.png)
+# SCSL
 
-#                                   TenjiCoin Core
+## Smart-Contract Security Lab
 
-TenjiCoin is a meme token built around a simple idea: the market moves too fast for most people.
+SCSL is an educational and practical Solidity security repository built to teach developers how vulnerabilities actually happen, how attackers exploit them, and how to fix them using production-minded patterns.
 
-Tenji is the turtle that always arrives one candle too late. It is not a mascot for perfect execution or flawless alpha. It is a mascot for the trader who misses the clean entry, hesitates on the exit, and still shows up for the next trade.
+This project is intentionally split into two major areas:
 
-This repository contains the on-chain core of the Tenji project:
+- `examples/`: the educational encyclopedia of vulnerabilities, exploit flows, secure rewrites, and test cases.
+- `library/`: the reusable Solidity security primitives that will be designed for direct integration into real projects.
 
-- `TenjiCoin`, a fixed-supply ERC-20 token with burn support
-- `TenjiAirdrop`, an airdrop contract with single-claim enforcement and basic anti-bot rules
-- `AirdropClaimCaller`, a helper contract used to test contract-call rejection
-- Hardhat deployment scripts, tests, and repo-level docs
+The philosophy of the repository is simple:
 
-## Why Tenji Exists
+> To secure smart contracts, you must first learn how to break them.
 
-The crypto market moves fast.
-Too fast for most people.
+SCSL is designed for:
 
-Tenji exists for those who are always one step behind, not because they are stupid, but because the market never waits.
+- junior Solidity developers who want to build security intuition early
+- mid-level Web3 engineers moving toward auditing and protocol security
+- hackathon teams that need fast, practical security references
+- educators and self-learners who want exploit-driven explanations instead of shallow examples
 
-This is not a token about winning every trade.
-It is a token about being late and still showing up.
+## Repository Architecture
 
-## Core Facts
+```text
+/library
+/examples
+/public
+README.md
+LICENSE
+package.json
+hardhat.config.ts
+tsconfig.json
+.gitignore
+```
 
-- Token name: `TenjiCoin`
-- Symbol: `TENJI`
-- Standard: ERC-20
-- Decimals: 18
-- Total supply: `167,000,000,000 TENJI`
-- Supply model: fixed at deployment
-- Minting after deployment: not supported
-- Burn support: enabled for token holders
-- Taxes or transfer fees: none
+## What To Push To GitHub
 
-## Initial Allocation
+For a real GitHub repository, you should keep not only the top-level content folders, but also the project metadata and tooling files that make the repository reproducible.
 
-- Liquidity: `60,000,000,000 TENJI` or about `35.93%`
-- Team: `20,000,000,000 TENJI` or about `11.98%`
-- Airdrop reserve: `20,000,000,000 TENJI` or about `11.98%`
-- Reserve for marketing and future liquidity: `67,000,000,000 TENJI` or about `40.12%`
+Recommended to commit:
 
-The deployment flow predicts the future `TenjiAirdrop` address and mints the fixed `20,000,000,000 TENJI` airdrop reserve directly into that contract during token deployment. The remaining reserve is minted to a dedicated reserve wallet for future liquidity, marketing, and ecosystem operations.
+- `library/`
+- `examples/`
+- `public/`
+- `README.md`
+- `LICENSE`
+- `package.json`
+- `package-lock.json`
+- `hardhat.config.ts`
+- `tsconfig.json`
+- `.gitignore`
 
-## Repository Map
+Do not commit:
 
-- [Litepaper](./docs/litepaper.md)
-- [Tokenomics](./docs/tokenomics.md)
-- [Airdrop](./docs/airdrop.md)
-- [Audit Status](./docs/audit.md)
-- [Security](./docs/SECURITY.md)
-- [Deployment](./docs/deployment.md)
-- [Contracts](./docs/CONTRACTS.md)
-- [FAQ](./docs/FAQ.md)
-- [Roadmap](./docs/roadmap.md)
-- [Contributing](./CONTRIBUTING.md)
-- [Changelog](./CHANGELOG.md)
+- `.env`
+- `node_modules/`
+- `artifacts/`
+- `cache/`
+- `coverage/`
 
-## Quick Start
+Right now, because the library is still under active development, it is also reasonable to keep the temporary development-only layers in the repository:
+
+- `library/mocks/`
+- `library/test/`
+
+Later, when the reusable package surface is finalized, those temporary files can be removed from the published library layer.
+
+## What Lives In `examples`
+
+Each vulnerability module is a full educational unit with:
+
+- a long-form topic guide in English
+- `Vulnerable.sol`
+- `Attack.sol`
+- `Fixed.sol`
+- exploit tests
+- fix validation tests
+
+These modules are designed to feel like real audit case studies rather than toy snippets.
+
+Every module is meant to answer four questions clearly:
+
+- what the vulnerability is
+- why it exists at the EVM and protocol-design level
+- how an attacker actually abuses it
+- how to redesign the system so the class of bug becomes harder to reintroduce
+
+## What Lives In `library`
+
+The `library/` directory is reserved for reusable security patterns and helper contracts, such as:
+
+- reentrancy guards
+- pull-payment primitives
+- two-step ownership helpers
+- signature validation helpers
+- storage-safe proxy helpers
+- secure accounting utilities
+
+This layer is intended to become the package-quality part of SCSL.
+
+The long-term direction is to make `library/` suitable for packaging and reuse, while `examples/` remains the open educational knowledge base of the project.
+
+## Current Example Modules
+
+- `reentrancy`
+- `access-control`
+- `dos`
+- `integer-overflow-underflow`
+- `delegatecall`
+- `signature-replay`
+- `timestamp-manipulation`
+- `front-running-mev`
+- `flash-loans`
+- `storage-collisions`
+
+## Development
 
 Install dependencies:
 
@@ -74,49 +126,26 @@ Install dependencies:
 npm install
 ```
 
-Run the test suite:
+Run all example tests:
 
 ```bash
-npm test
+npx hardhat test
 ```
 
-Compile contracts:
+Compile all example contracts:
 
 ```bash
-npm run compile
+npx hardhat compile
 ```
 
-Deploy locally:
+Run only the library development tests:
 
 ```bash
-npm run deploy:tenji:local
+npm run test:library
 ```
 
-Deploy to Sepolia:
+## Notes
 
-```bash
-npm run deploy:tenji:sepolia
-```
-
-After deployment, the script writes contract addresses and deployment metadata to `deployments/<network>.json`.
-
-## What Is In Scope
-
-This repository is focused on the token, the airdrop system, deployment, and testing. The public website, frontend experience, and richer product-facing docs can evolve separately.
-
-## Status
-
-- Core token contract implemented
-- Airdrop contract implemented
-- Deployment flow implemented
-- Unit tests included
-- GitHub Actions CI included
-- Markdown docs included
-
-## Disclaimer
-
-Tenji is a meme-driven crypto project. This repository is not financial advice, not an audited promise of safety, and not a guarantee of future value. Anyone interacting with the contracts should review the code, understand the risks, and make independent decisions.
-
-## License
-
-MIT. See [LICENSE](./LICENSE).
+- All educational documentation and code comments are written in English.
+- The repository conversation and collaboration can still happen in Russian.
+- Example tests are grouped by vulnerability module to keep the project scalable as more modules are added.

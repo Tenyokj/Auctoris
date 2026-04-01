@@ -47,6 +47,10 @@ if (process.env.SEPOLIA_RPC_URL) {
 }
 
 const config: HardhatUserConfig = {
+  paths: {
+    sources: "./examples/contracts",
+    tests: "./examples/test_examples",
+  },
   solidity: {
     version: "0.8.28",
     settings: {

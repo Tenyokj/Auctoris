@@ -1,9 +1,32 @@
 {
-  "name": "hardhat3",
+  "name": "scsl",
   "version": "1.0.0",
+  "description": "SCSL (Smart-Contract Security Lab) is an educational Solidity security repository with exploit-driven examples and reusable security primitives.",
+  "license": "GPL-3.0-only",
   "type": "module",
+  "keywords": [
+    "solidity",
+    "smart-contract-security",
+    "web3-security",
+    "ethereum",
+    "hardhat",
+    "smart-contracts",
+    "security-lab",
+    "solidity-security",
+    "reentrancy",
+    "delegatecall"
+  ],
+  "files": [
+    "library",
+    "examples",
+    "public",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "test": "hardhat test",
+    "test:examples": "hardhat test examples/test_examples",
+    "test:library": "hardhat clean && hardhat test library/test/*.js",
     "compile": "hardhat compile",
     "coverage": "hardhat test --coverage",
     "deploy:tenji:local": "hardhat run --build-profile production scripts/deploy.ts --network localhost",
