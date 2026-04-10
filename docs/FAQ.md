@@ -1,68 +1,30 @@
-# Tenji FAQ
+# FlashAlliance FAQ
 
-## What is Tenji?
+**What is FlashAlliance?**
+A lightweight module where a fixed participant group pools ERC20 funds to buy and later sell an NFT.
 
-Tenji is a meme token project built around the idea of the late trader. Its mascot is a turtle that understands the market, but always reacts too slowly.
+**Is this integrated with BERT governance?**
+No. It is standalone and has local `Ownable` admin controls.
 
-## Why a turtle?
+**Can participants be changed after deployment?**
+No. Participant list and shares are fixed in constructor.
 
-Because the turtle captures a specific crypto feeling: watching the move, thinking about the move, and acting after the best moment has already passed.
+**How are sale decisions approved?**
+By share-weighted voting:
+1. Normal price: `quorumPercent` (default 60)
+2. Loss price: `lossSaleQuorumPercent` (default 80)
 
-## Is Tenji a serious protocol or a meme project?
+**Can one participant overfund the pool and still keep the same share?**
+No. Each participant has a strict funding quota derived from the configured share split.
 
-It is a meme project with a real on-chain implementation. The culture is meme-first, but the contracts, deployment, and documentation are meant to be inspectable and concrete.
+**What happens if target funding is not reached?**
+After deadline, a participant can call `cancelFunding`, then everyone withdraws own deposit via `withdrawRefund`.
 
-## What standard does the token use?
+**Can NFT be rescued if sale is stuck?**
+Yes. Use emergency voting + `emergencyWithdrawNFT` once quorum is reached. If the emergency proposal expires, participants can reset and vote again.
 
-`TenjiCoin` is an ERC-20 token.
+**How are sale proceeds paid out?**
+Sale proceeds become claimable per participant through `claimProceeds`.
 
-## What is the symbol?
-
-`TENJI`
-
-## Can more tokens be minted later?
-
-No. The current token contract mints the full supply during deployment and does not expose a post-deploy mint function.
-
-## Does the token charge transfer fees?
-
-No. TenjiCoin has no transfer tax or fee logic.
-
-## Can holders burn tokens?
-
-Yes. The token includes burn support.
-
-## How much supply exists?
-
-`167,000,000,000 TENJI`
-
-## How is the supply split initially?
-
-- `60,000,000,000 TENJI` liquidity
-- `20,000,000,000 TENJI` team
-- `20,000,000,000 TENJI` airdrop
-- `67,000,000,000 TENJI` reserve for marketing and future liquidity
-
-## Does the airdrop contract really hold the full reserve?
-
-Yes. The deployment script predicts the future airdrop address and mints the full reserve directly into `TenjiAirdrop`.
-
-## Why might the claim campaign be smaller than the full reserve?
-
-Because the reserve and the active campaign are different things. The reserve is fixed at `20,000,000,000 TENJI`, and the current intended campaign is `200,000 TENJI` for `100,000` users.
-
-## Why can contracts not claim the airdrop?
-
-The current design tries to reduce simple bot farming and multi-step contract claim flows by rejecting contract callers.
-
-## Will smart wallets work?
-
-Not necessarily. The current anti-contract logic may reject some smart-wallet patterns by design.
-
-## Is the project audited?
-
-Not at the moment, unless a public external audit is later published.
-
-## Where will the full user-facing docs live?
-
-The long-form user experience is intended for the website. This repository keeps the markdown reference set for GitHub and technical transparency.
+**Is FlashAlliance upgradeable?**
+No. Contracts are non-upgradeable in current design.

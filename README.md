@@ -1,151 +1,59 @@
-<p align="center">
-  <img src="./public/SCSL_logo.png" alt="SCSL logo" width="220" />
-</p>
+![Flash-Alliances v1.0.0](https://img.shields.io/static/v1?label=Flash-Alliances&message=%20v1.0.0&color=6B8E23) ![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-green)
+![Node.js >=22](https://img.shields.io/badge/Node.js->=22-brightgreen) ![TypeScript 5.8.0](https://img.shields.io/badge/TypeScript-5.8.0-3178C6) ![Hardhat 3.0.15](https://img.shields.io/badge/Hardhat-3.0.1-yellow) ![Solidity](https://img.shields.io/badge/Solidity-^0.8.20-orange) ![Ethers 6.15.0](https://img.shields.io/badge/Ethers-6.15.0-3C3C3D) ![Tests: Unit passing](https://img.shields.io/badge/Tests%3A%20Unit-passing-success) ![Tests: Coverage >95%](https://img.shields.io/badge/coverage-95%25-orange)
+![Tests: Integration: Scratch passing](https://img.shields.io/badge/Tests%3A%20Integration%3A%20Scratch-passing-success) ![Tests: Integration: Sepolia Fork passing](https://img.shields.io/badge/Tests%3A%20Integration%3A%20Sepolia%20Fork-passing-success) ![Linters passing](https://img.shields.io/badge/Linters-passing-success)
 
-# SCSL
+![FlashAlliance Banner](./docs/flash-asset.png)
 
-## Smart-Contract Security Lab
+**FlashAlliance**
+is a standalone ERC20-funded collective NFT trading module.
+Each `Alliance` instance is a self-contained pool with fixed participants and fixed ownership shares.
 
-SCSL is an educational and practical Solidity security repository built to teach developers how vulnerabilities actually happen, how attackers exploit them, and how to fix them using production-minded patterns.
+**FlashAlliance** is designed as a lightweight, capital-efficient coordination layer for small groups that want to acquire and manage high-value NFTs together.
 
-This project is intentionally split into two major areas:
+There is no global DAO dependency.
+Each Alliance operates independently.
 
-- `examples/`: the educational encyclopedia of vulnerabilities, exploit flows, secure rewrites, and test cases.
-- `library/`: the reusable Solidity security primitives that will be designed for direct integration into real projects.
+Note: Please read the Contract [Documentation](https://flash-docs.vercel.app) before integrating with this repo.
 
-The philosophy of the repository is simple:
+**Core Flow**
 
-> To secure smart contracts, you must first learn how to break them.
+1. Participants deposit ERC20 in `Funding`.
+2. Each participant deposits only up to their fixed funding quota.
+3. Alliance buys NFT when target is reached.
+4. Participants vote sale params in `Acquired`.
+5. Sale executes and proceeds become claimable by fixed shares.
+6. If funding fails, participants withdraw refunds.
+7. Emergency NFT withdrawal is available via participant quorum and expiry-based reset.
 
-SCSL is designed for:
 
-- junior Solidity developers who want to build security intuition early
-- mid-level Web3 engineers moving toward auditing and protocol security
-- hackathon teams that need fast, practical security references
-- educators and self-learners who want exploit-driven explanations instead of shallow examples
+**Contract Documentation**
+See: [docs/CONTRACTS.md](docs/CONTRACTS.md)
 
-## Repository Architecture
+**Learn More**
+1. Flash Alliances site: [website](https://flash-alliances.vercel.app)
+2. Flash Alliances front: [repository](https://github.com/Tenyokj/FlashAlliance-front.git)
 
-```text
-/library
-/examples
-/public
-README.md
-LICENSE
-package.json
-hardhat.config.ts
-tsconfig.json
-.gitignore
-```
+**Docs**
 
-## What To Push To GitHub
+1. Architecture: [ARCHITECTURE.md](docs/ARCHITECTURE.md)
+2. Security: [SECURITY.md](docs/SECURITY.md)
+3. Upgrades: [UPGRADES.md](docs/UPGRADES.md)
+4. Configuration: [CONFIG.md](docs/CONFIG.md)
+5. Operations: [OPERATIONS.md](docs/OPERATIONS.md)
+6. FAQ: [FAQ.md](docs/FAQ.md)
+7. Glossary: [GLOSSARY.md](docs/GLOSSARY.md)
+8. Getting Started: [GETTING_STARTED.md](docs/GETTING_STARTED.md)
 
-For a real GitHub repository, you should keep not only the top-level content folders, but also the project metadata and tooling files that make the repository reproducible.
+**Disclaimer**
 
-Recommended to commit:
+This repository contains the core smart contracts of the protocol. The codebase may evolve rapidly, so older guides may not match the current layout. Refer to the latest docs for accurate integration guidance.
 
-- `library/`
-- `examples/`
-- `public/`
-- `README.md`
-- `LICENSE`
-- `package.json`
-- `package-lock.json`
-- `hardhat.config.ts`
-- `tsconfig.json`
-- `.gitignore`
+**License**
 
-Do not commit:
+2025 BERT info@tenyokj
 
-- `.env`
-- `node_modules/`
-- `artifacts/`
-- `cache/`
-- `coverage/`
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 of the License, or any later version.
 
-Right now, because the library is still under active development, it is also reasonable to keep the temporary development-only layers in the repository:
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-- `library/mocks/`
-- `library/test/`
-
-Later, when the reusable package surface is finalized, those temporary files can be removed from the published library layer.
-
-## What Lives In `examples`
-
-Each vulnerability module is a full educational unit with:
-
-- a long-form topic guide in English
-- `Vulnerable.sol`
-- `Attack.sol`
-- `Fixed.sol`
-- exploit tests
-- fix validation tests
-
-These modules are designed to feel like real audit case studies rather than toy snippets.
-
-Every module is meant to answer four questions clearly:
-
-- what the vulnerability is
-- why it exists at the EVM and protocol-design level
-- how an attacker actually abuses it
-- how to redesign the system so the class of bug becomes harder to reintroduce
-
-## What Lives In `library`
-
-The `library/` directory is reserved for reusable security patterns and helper contracts, such as:
-
-- reentrancy guards
-- pull-payment primitives
-- two-step ownership helpers
-- signature validation helpers
-- storage-safe proxy helpers
-- secure accounting utilities
-
-This layer is intended to become the package-quality part of SCSL.
-
-The long-term direction is to make `library/` suitable for packaging and reuse, while `examples/` remains the open educational knowledge base of the project.
-
-## Current Example Modules
-
-- `reentrancy`
-- `access-control`
-- `dos`
-- `integer-overflow-underflow`
-- `delegatecall`
-- `signature-replay`
-- `timestamp-manipulation`
-- `front-running-mev`
-- `flash-loans`
-- `storage-collisions`
-
-## Development
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Run all example tests:
-
-```bash
-npx hardhat test
-```
-
-Compile all example contracts:
-
-```bash
-npx hardhat compile
-```
-
-Run only the library development tests:
-
-```bash
-npm run test:library
-```
-
-## Notes
-
-- All educational documentation and code comments are written in English.
-- The repository conversation and collaboration can still happen in Russian.
-- Example tests are grouped by vulnerability module to keep the project scalable as more modules are added.
+You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.

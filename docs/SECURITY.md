@@ -1,76 +1,27 @@
-# Tenji Security
+# FlashAlliance Security Notes
 
-## Current Security Posture
+**Threat Model**
+1. Participants are semi-trusted and can coordinate voting.
+2. Owner/admin is trusted for pause controls.
+3. External token/NFT contracts are trusted only by interface assumptions.
 
-The Tenji contracts are intentionally small and simple, but they should still be treated as unaudited software unless an external audit is completed.
+**Built-in Protections**
+1. `ReentrancyGuard` on sensitive state-changing paths.
+2. `SafeERC20` wrappers for token transfers.
+3. `safeTransferFrom` for NFT transfers.
+4. Share sum validation (`== 100`) at construction.
+5. Participant-only gating on core actions.
+6. Per-participant funding quotas prevent contribution/share mismatch.
+7. Expiry/reset rounds prevent stale acquisition, sale, and emergency proposals from permanently blocking the alliance.
+8. Claim-based sale payouts reduce settlement blast radius versus inline fan-out transfers.
 
-The main security advantage of the current design is limited scope:
+**Known Trust Assumptions**
+1. Admin can pause and unpause operations.
+2. Participants are fixed at deployment (no dynamic membership management).
+3. ERC20 token and NFT contracts behave according to standards.
 
-- no upgradeability
-- no post-deploy mint function
-- no transfer tax logic
-- no reflection or rebasing
-- no DEX router complexity inside the token
-
-## Trust Assumptions
-
-Users should understand the following trust boundaries:
-
-- `TenjiCoin` does not expose privileged minting after deployment
-- `TenjiAirdrop` owner can update the cooldown value
-- the owner does not control user claim history or token balances directly
-- deployment parameters matter because they shape initial distribution
-
-## Important Invariants
-
-The design relies on these invariants:
-
-- total token supply is fixed at deployment
-- initial allocation is split into liquidity, team, airdrop, and reserve wallets
-- the `20,000,000,000 TENJI` airdrop reserve is minted directly into `TenjiAirdrop`
-- each address can claim only once
-- airdrop claims fail when the pool no longer covers `amountPerUser`
-
-## Known Limitations
-
-## 1. Anti-bot checks are practical, not perfect
-
-The airdrop blocks contract callers by checking `msg.sender.code.length`.
-
-This helps against simple contract wrappers, but it is not a universal Sybil defense and may exclude some smart-wallet users.
-
-## 2. Cooldown is owner-controlled
-
-The owner can change `cooldownBlocks`. This is intentionally narrow admin power, but it still affects claim behavior.
-
-## 3. No pause switch
-
-The current contracts do not implement a pause mechanism. Simplicity reduces complexity, but it also means emergency controls are limited.
-
-## 4. No on-chain vesting for team allocation
-
-The `20,000,000,000 TENJI` team allocation is minted directly to the configured wallet. If vesting is desired, it must be handled operationally or by future tooling outside the current contracts.
-
-## 5. Reserve wallet is operationally sensitive
-
-The `67,000,000,000 TENJI` reserve is minted directly to the configured reserve wallet. That wallet is intended for future liquidity, marketing, and ecosystem operations, so its custody and disclosure matter operationally even though the token contract itself exposes no admin mint path.
-
-## Operational Recommendations
-
-- keep deployer keys private and out of version control
-- use a dedicated deployer for live networks
-- verify deployed contracts on the target explorer
-- publish deployed addresses clearly
-- review airdrop parameters before deployment
-- test the full deployment flow on Sepolia before any production-style launch
-
-## User Recommendations
-
-- confirm token and airdrop addresses from official project channels
-- check the airdrop contract balance on-chain
-- verify that `amountPerUser` and `maxUsers` make sense for the intended campaign
-- do not assume smart wallets are supported by the current claim restrictions
-
-## Scope of This Document
-
-This document describes the current repository state only. It is not a formal audit report and does not replace independent review.
+**Operational Recommendations**
+1. Use multisig as alliance admin for production.
+2. Pre-verify participant list and shares before deployment.
+3. Add monitoring for funding deadlines, proposal expiry, and unclaimed proceeds.
+4. Prefer audited token/NFT contracts in non-test environments.

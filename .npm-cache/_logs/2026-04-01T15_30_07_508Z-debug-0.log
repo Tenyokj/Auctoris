@@ -1,0 +1,125 @@
+0 verbose cli /Users/daniilvolkova/.nvm/versions/node/v24.10.0/bin/node /Users/daniilvolkova/.nvm/versions/node/v24.10.0/bin/npm
+1 info using npm@11.6.1
+2 info using node@v24.10.0
+3 silly config load:file:/Users/daniilvolkova/.nvm/versions/node/v24.10.0/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/daniilvolkova/Desktop/hardhat3 copy/.npmrc
+5 silly config load:file:/Users/daniilvolkova/.npmrc
+6 silly config load:file:/Users/daniilvolkova/.nvm/versions/node/v24.10.0/etc/npmrc
+7 verbose title npm pack
+8 verbose argv "pack" "--dry-run" "--cache" "./.npm-cache"
+9 verbose logfile logs-max:10 dir:/Users/daniilvolkova/Desktop/hardhat3 copy/.npm-cache/_logs/2026-04-01T15_30_07_508Z-
+10 verbose logfile /Users/daniilvolkova/Desktop/hardhat3 copy/.npm-cache/_logs/2026-04-01T15_30_07_508Z-debug-0.log
+11 silly logfile done cleaning log files
+12 http fetch GET https://registry.npmjs.org/npm attempt 1 failed with ENOTFOUND
+13 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+14 notice
+15 notice 📦  @scsl/contracts@1.0.0
+16 notice Tarball Contents
+17 notice 4.6kB README.md
+17 notice 17.0kB examples/contracts/access-control/ACCESS_CONTROL.md
+17 notice 2.1kB examples/contracts/access-control/Attack.sol
+17 notice 2.9kB examples/contracts/access-control/Fixed.sol
+17 notice 2.2kB examples/contracts/access-control/Vulnerable.sol
+17 notice 2.9kB examples/contracts/delegatecall/Attack.sol
+17 notice 16.3kB examples/contracts/delegatecall/DELEGATECALL.md
+17 notice 3.5kB examples/contracts/delegatecall/Fixed.sol
+17 notice 2.8kB examples/contracts/delegatecall/Vulnerable.sol
+17 notice 2.3kB examples/contracts/dos/Attack.sol
+17 notice 15.9kB examples/contracts/dos/DOS.md
+17 notice 3.4kB examples/contracts/dos/Fixed.sol
+17 notice 2.8kB examples/contracts/dos/Vulnerable.sol
+17 notice 3.8kB examples/contracts/flash-loans/Attack.sol
+17 notice 3.9kB examples/contracts/flash-loans/Fixed.sol
+17 notice 16.5kB examples/contracts/flash-loans/FLASH_LOANS.md
+17 notice 8.7kB examples/contracts/flash-loans/Vulnerable.sol
+17 notice 3.2kB examples/contracts/front-running-mev/Attack.sol
+17 notice 4.5kB examples/contracts/front-running-mev/Fixed.sol
+17 notice 13.6kB examples/contracts/front-running-mev/FRONT_RUNNING_MEV.md
+17 notice 5.0kB examples/contracts/front-running-mev/Vulnerable.sol
+17 notice 2.3kB examples/contracts/integer-overflow-underflow/Attack.sol
+17 notice 2.2kB examples/contracts/integer-overflow-underflow/Fixed.sol
+17 notice 16.3kB examples/contracts/integer-overflow-underflow/INTEGER_OVERFLOW_UNDERFLOW.md
+17 notice 2.7kB examples/contracts/integer-overflow-underflow/Vulnerable.sol
+17 notice 3.6kB examples/contracts/reentrancy/Attack.sol
+17 notice 2.6kB examples/contracts/reentrancy/Fixed.sol
+17 notice 17.5kB examples/contracts/reentrancy/REENTRANCY.md
+17 notice 3.1kB examples/contracts/reentrancy/Vulnerable.sol
+17 notice 2.4kB examples/contracts/signature-replay/Attack.sol
+17 notice 3.3kB examples/contracts/signature-replay/Fixed.sol
+17 notice 13.5kB examples/contracts/signature-replay/SIGNATURE_REPLAY.md
+17 notice 3.0kB examples/contracts/signature-replay/Vulnerable.sol
+17 notice 2.2kB examples/contracts/storage-collisions/Attack.sol
+17 notice 4.6kB examples/contracts/storage-collisions/Fixed.sol
+17 notice 15.2kB examples/contracts/storage-collisions/STORAGE_COLLISIONS.md
+17 notice 4.7kB examples/contracts/storage-collisions/Vulnerable.sol
+17 notice 2.3kB examples/contracts/timestamp-manipulation/Attack.sol
+17 notice 2.2kB examples/contracts/timestamp-manipulation/Fixed.sol
+17 notice 15.7kB examples/contracts/timestamp-manipulation/TIMESTAMP_MANIPULATION.md
+17 notice 2.7kB examples/contracts/timestamp-manipulation/Vulnerable.sol
+17 notice 446B examples/README.md
+17 notice 3.9kB examples/test_examples/access-control/access-control.attack.test.js
+17 notice 3.7kB examples/test_examples/access-control/access-control.fix.test.js
+17 notice 3.7kB examples/test_examples/delegatecall/delegatecall.attack.test.js
+17 notice 3.2kB examples/test_examples/delegatecall/delegatecall.fix.test.js
+17 notice 2.8kB examples/test_examples/dos/dos.attack.test.js
+17 notice 3.4kB examples/test_examples/dos/dos.fix.test.js
+17 notice 5.5kB examples/test_examples/flash-loans/flash-loans.attack.test.js
+17 notice 5.2kB examples/test_examples/flash-loans/flash-loans.fix.test.js
+17 notice 3.0kB examples/test_examples/front-running-mev/front-running-mev.attack.test.js
+17 notice 3.4kB examples/test_examples/front-running-mev/front-running-mev.fix.test.js
+17 notice 4.4kB examples/test_examples/integer-overflow-underflow/integer-overflow-underflow.attack.test.js
+17 notice 3.3kB examples/test_examples/integer-overflow-underflow/integer-overflow-underflow.fix.test.js
+17 notice 4.8kB examples/test_examples/reentrancy/reentrancy.attack.test.js
+17 notice 3.4kB examples/test_examples/reentrancy/reentrancy.fix.test.js
+17 notice 740B examples/test_examples/setup.ts
+17 notice 4.1kB examples/test_examples/signature-replay/signature-replay.attack.test.js
+17 notice 4.8kB examples/test_examples/signature-replay/signature-replay.fix.test.js
+17 notice 4.1kB examples/test_examples/storage-collisions/storage-collisions.attack.test.js
+17 notice 3.8kB examples/test_examples/storage-collisions/storage-collisions.fix.test.js
+17 notice 2.8kB examples/test_examples/timestamp-manipulation/timestamp-manipulation.attack.test.js
+17 notice 3.1kB examples/test_examples/timestamp-manipulation/timestamp-manipulation.fix.test.js
+17 notice 119B library/access/INDEX.sol
+17 notice 2.3kB library/access/TwoStepOwnable.sol
+17 notice 2.1kB library/accounting/BalanceAccounting.sol
+17 notice 125B library/accounting/INDEX.sol
+17 notice 131B library/auth/INDEX.sol
+17 notice 1.2kB library/auth/NoncedAuthorizations.sol
+17 notice 121B library/guards/INDEX.sol
+17 notice 1.1kB library/guards/ReentrancyGuard.sol
+17 notice 885B library/INDEX.sol
+17 notice 143B library/oracle/INDEX.sol
+17 notice 1.6kB library/oracle/TrustedPriceOracleConsumer.sol
+17 notice 178B library/payments/INDEX.sol
+17 notice 827B library/payments/NativeTransfer.sol
+17 notice 1.8kB library/payments/PullPaymentEscrow.sol
+17 notice 133B library/proxy/INDEX.sol
+17 notice 1.7kB library/proxy/TrustedPluginRegistry.sol
+17 notice 3.1kB library/README.md
+17 notice 129B library/signatures/INDEX.sol
+17 notice 1.6kB library/signatures/SignatureAuthorizer.sol
+17 notice 1.4kB library/storage/EIP1967SlotAccess.sol
+17 notice 125B library/storage/INDEX.sol
+17 notice 790B library/time/BlockCooldown.sol
+17 notice 117B library/time/INDEX.sol
+17 notice 1.0kB library/trading/ExecutionConstraints.sol
+17 notice 131B library/trading/INDEX.sol
+17 notice 2.0kB package.json
+17 notice 207B public/README.md
+17 notice 2.3MB public/SCSL_banner.png
+17 notice 2.8MB public/SCSL_logo.png
+18 notice Tarball Details
+19 notice name: @scsl/contracts
+20 notice version: 1.0.0
+21 notice filename: scsl-contracts-1.0.0.tgz
+22 notice package size: 5.2 MB
+23 notice unpacked size: 5.5 MB
+24 notice shasum: e0311061cecc9dd72b13cfa498f0a74341733a8a
+25 notice integrity: sha512-rIVQdiDuZsQQD[...]byRxihm5lK9eQ==
+26 notice total files: 92
+27 notice
+28 verbose cwd /Users/daniilvolkova/Desktop/hardhat3 copy
+29 verbose os Darwin 25.3.0
+30 verbose node v24.10.0
+31 verbose npm  v11.6.1
+32 verbose exit 0
+33 info ok

@@ -29,3 +29,6 @@ types/
 
 # misc
 *.tsbuildinfo
+
+# other code
+erc734-735/
