@@ -17,7 +17,7 @@
 ![Status-v1 Core Ready](https://img.shields.io/badge/Status-v1%20Core%20Ready-success)
 
 <p align="center">
-  <img src="./docs/assets/auctoris_logo.png" alt="Auctoris logo" width="180" />
+  <img src="./docs/assets/auctoris_logo.png" alt="Auctoris logo" width="580" />
 </p>
 
 **Auctoris Licensing Authority** is an upgradeable on-chain licensing stack for issuing, selling, validating, and revoking rights as ERC-1155 access keys.
