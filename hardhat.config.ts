@@ -52,12 +52,12 @@ const config: HardhatUserConfig = {
     settings: {
       evmVersion: "prague",
       viaIR: true,
-        optimizer: {
-          enabled: true,
-          runs: 200,
-        },
+      optimizer: {
+        enabled: true,
+        runs: 1,
       },
     },
+  },
   networks,
   verify: {
     etherscan: process.env.ETHERSCAN_API_KEY

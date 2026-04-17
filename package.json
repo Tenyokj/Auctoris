@@ -1,11 +1,18 @@
 {
-  "name": "hardhat3",
+  "name": "auctoris-licensing-authority",
   "version": "1.0.0",
+  "description": "Auctoris Licensing Authority: upgradeable on-chain license registry and ERC-1155 access key protocol.",
   "type": "module",
   "scripts": {
     "test": "hardhat test",
-    "te": "hardhat test",
-    "compile": "hardhat compile"
+    "compile": "hardhat compile",
+    "coverage": "hardhat test --coverage",
+    "deploy:protocol": "hardhat run scripts/deploy/deploy-license-protocol.ts",
+    "deploy:protocol:upgradeable": "hardhat run scripts/deploy/deploy-license-protocol.ts",
+    "deploy:localhost": "hardhat run --network localhost scripts/deploy/deploy-license-protocol.ts",
+    "deploy:sepolia": "hardhat run --network sepolia scripts/deploy/deploy-license-protocol.ts",
+    "ops:transfer-safe:sepolia": "hardhat run --network sepolia scripts/ops/transfer-proxy-admin-to-safe.ts",
+    "ops:upgrade:sepolia": "hardhat run --network sepolia scripts/ops/upgrade-proxy.ts"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ethers": "^4.0.3",

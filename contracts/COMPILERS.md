@@ -1,6 +1,6 @@
-**Compiler Versions**
+**Auctoris Compiler Versions**
 
-This repository uses a single Solidity compiler version for all contracts:
+The Auctoris Licensing Authority repository uses a single Solidity compiler version for all contracts:
 
 1. `solc 0.8.28`
 

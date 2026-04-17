@@ -1,38 +1,104 @@
-# FlashAlliance Operations
+# Auctoris Operations
 
-**Daily Operations**
-1. Monitor new alliances created via `AllianceFactory`.
-2. Track alliance state transitions (`Funding` -> `Acquired` -> `Closed`).
-3. Verify critical events: `FundingTargetReached`, `NFTBought`, `SaleExecuted`, `FundingCancelled`, `EmergencyWithdrawn`.
-4. Monitor `ProceedsAllocated` / `ProceedsClaimed` to track post-sale settlement.
+## Purpose
 
-**Runbook: New Alliance**
-1. Ensure participants and shares are correct (sum must be 100).
-2. Ensure governance params are correct (`quorumPercent`, `lossSaleQuorumPercent`, `minSalePrice`).
-3. Create alliance through factory.
-3. Record alliance address and owner/admin address.
-4. Record participant quotas from `requiredContribution(address)`.
+This document is the practical operations checklist for running **Auctoris Licensing Authority** like a real protocol rather than a local-only codebase.
 
-**Runbook: Funding Failure**
-1. Wait until funding deadline passes.
-2. Participant calls `cancelFunding`.
-3. Each participant calls `withdrawRefund`.
+## Ownership
 
-**Runbook: Sale Execution**
-1. Seller approves NFT to alliance.
-2. Participant buys NFT through `buyNFT`.
-3. Participants vote via `voteToSell`.
-4. Buyer approves ERC20 to alliance.
-5. Participant executes sale via `executeSale`.
-6. Participants claim funds via `claimProceeds`.
+For public deployment, do not leave operational control on a single EOA longer than necessary.
 
-**Runbook: Emergency Rescue**
-1. Participants vote recipient using `voteEmergencyWithdraw`.
-2. If proposal expires, call `resetEmergencyProposal` and revote.
-3. Once quorum is reached, call `emergencyWithdrawNFT`.
+Move control of proxy admins to a multisig.
 
-**Observability**
-1. Index alliance addresses from `AllianceCreated`.
-2. Index voting events with round ids and accumulated weight to show current proposal status.
-3. Index `ProceedsAllocated` and `ProceedsClaimed` to expose payout progress.
-4. Alert on stalled alliances close to deadline without target reached.
+That should be your default production posture.
+
+### Recommended multisig posture
+
+For Auctoris, the clean default is:
+
+1. Safe multisig
+2. `2 of 3` signers for early production
+3. Separate signer devices and recovery paths
+
+Why this matters:
+
+1. A single EOA is a single point of failure
+2. Proxy admin ownership is effectively protocol control
+3. Multisig reduces key-loss, key-compromise, and unilateral-upgrade risk
+
+## Upgrade discipline
+
+When preparing an upgrade:
+
+1. Deploy the new implementation
+2. Run the full test suite
+3. Run storage-layout review manually before upgrading
+4. Upgrade through the proxy admin
+5. Re-run post-upgrade smoke tests
+
+## Metadata policy
+
+Define a stable metadata policy early.
+
+Decide:
+
+1. Whether metadata is immutable or not
+2. Whether asset metadata and license metadata live on IPFS, Arweave, or controlled HTTPS
+3. How legal license text is represented and versioned
+
+## Monitoring
+
+Monitor:
+
+1. Purchase success and failure rates
+2. Revoke activity
+3. Asset and license-type configuration changes
+4. Proxy admin ownership changes
+5. Unusual signed-order usage patterns
+
+## API operations
+
+If you launch a hosted API:
+
+1. Keep the chain as source of truth
+2. Index events into a database
+3. Expose normalized read endpoints
+4. Reconcile indexed data against direct contract reads
+5. Log every API request path that partners depend on
+
+## Partner onboarding
+
+For every new partner, provide:
+
+1. The network name and chain id
+2. Registry proxy address
+3. Token proxy address
+4. ABI or SDK package
+5. Example `hasValidLicense` request
+6. Example `getLicenseState` request
+7. Example webhook or polling strategy if they use your hosted API
+
+## Incident response
+
+Prepare for:
+
+1. Mispriced license terms
+2. Wrong metadata
+3. Bad signed-order configuration
+4. A partner caching stale state
+5. The need to revoke or pause quickly
+
+At minimum, define:
+
+1. Who can pause operationally
+2. Who can revoke operationally
+3. Who controls the proxy admins
+4. How partners will be notified of an incident
+
+## Production mindset
+
+The contracts are the protocol.
+
+The SDK, docs, and API are the institution around the protocol.
+
+If you want Auctoris to feel respected, the operational layer has to be as deliberate as the smart contracts themselves.
